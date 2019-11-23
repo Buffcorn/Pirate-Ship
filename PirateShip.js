@@ -116,65 +116,22 @@ window.onload = function init()
 function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
    switch (key) {
-        case '1':
-            axis = xAxis;
-            theta[axis] += 2.0;
+        case 'a':
+        case 'A':
+            xTranl-=30.0;
             break;
-        case '2':
-            
-            axis = xAxis;
-            theta[axis] -= 2.0;
+        case 'd':
+        case 'D': 
+            xTranl+=30.0;
             break;
-        case '3':
-            
-            axis = yAxis;
-            theta[axis] += 2.0;
+        case 'w':
+        case 'W':
+            yTransl+=30.0;
             break;
-        case '4':
-            
-            axis = yAxis;
-            theta[axis] -= 2.0;
+        case 's':
+        case 'S':
+            yTransl-=30.0;
             break;
-        case '5':
-            
-            axis = zAxis;
-            theta[axis] += 2.0;
-            break;
-        case '6':
-            
-            axis = zAxis;
-            theta[axis] -= 2.0;
-        case 'f':
-        case 'F': 
-            // increment z 
-            zTransl += 2.0;
-            break;
-        case 'b':
-        case 'B': 
-            // decrement z 
-            zTransl -= 2.0; 
-            
-            break; 
-        case 'u':
-        case 'U':
-            // increment y 
-            yTransl += 2.0;
-           
-            break;
-        case 'd': 
-        case 'D':
-            // decrement y 
-            yTransl -= 2.0;
-            break;
-        case 'r': 
-        case 'R':
-            // increment x 
-            xTranl += 2.0; 
-            break; 
-        case 'l':
-        case 'L': 
-            // decrement x 
-            xTranl -= 2.0;
     }
 }
 function drawBox()
@@ -345,7 +302,7 @@ function render()
 
      pMatrix = mat4
      pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-     pMatrix = mult(pMatrix, translate(0, 0, -581));
+     pMatrix = mult(pMatrix, translate(0+xTranl, 0+yTransl, -581));
      pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
 
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
