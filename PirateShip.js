@@ -28,12 +28,9 @@ var texCoordsArray = []; //texel points
 var texture = [ ]; 
 var image = [ ]; 
 //====================================
-var xAxis = 0;
-var yAxis = 1;
-var zAxis = 2;
-var xTranl = 0; 
-var yTransl = 0;
-var zTransl = 0;
+var xPosBoat = -150; 
+var yPosBoat = -150;
+var zPosBoat = -581;
 
 var axis = 0;
 var theta = [ 0, 0, 0 ];
@@ -74,6 +71,10 @@ window.onload = function init()
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
+    document.getElementById("Reset").onclick = function () {
+        xPosBoat = -145; 
+        yPosBoat = -145;
+    };
     
     textureScene();
     drawBox();
@@ -104,7 +105,7 @@ window.onload = function init()
     projection = gl.getUniformLocation( program, "projection" );
     //event listeners for buttons
     
-    window.onkeydown = keyResponse;
+    //window.onkeydown = keyResponse;
 
     //initialize textures
     initializeTexture(image, "ocean.jpg", 0);
@@ -275,6 +276,22 @@ function quad(a, b, c, d)
         colors.push(0.0, 0.0, 0.0, 1.0);
     }
 }
+function moveBoat() {
+//-145, -145
+	if (xPosBoat <= -150  && yPosBoat <= 150) {
+		yPosBoat += 2;
+		
+	} else if (xPosBoat <= 150 && yPosBoat >= 150) {
+		xPosBoat += 2; 
+	} else if (xPosBoat >= 150 && yPosBoat >= -150) {
+		yPosBoat-= 2;
+		console.log("case 3");
+	} else {
+		xPosBoat-=2;
+	}
+	console.log(xPosBoat);
+	console.log(yPosBoat);
+}
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -295,14 +312,19 @@ function render()
 
    	//console.log(NumVertices/numTex);
      
-     //texture 
+     //boat and texture map on boat 
+     //xPosBoat yO
+     moveBoat();
 
      gl.bindTexture( gl.TEXTURE_2D, texture[0]);
      gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
 
      pMatrix = mat4
      pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-     pMatrix = mult(pMatrix, translate(0+xTranl, 0+yTransl, -581));
+     
+
+
+     pMatrix = mult(pMatrix, translate(xPosBoat, yPosBoat, -581));
      pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
 
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
