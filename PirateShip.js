@@ -114,7 +114,7 @@ window.onload = function init()
     render();
     
 }
-function keyResponse(event) {
+/* function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
    switch (key) {
         case 'a':
@@ -134,7 +134,7 @@ function keyResponse(event) {
             yTransl-=30.0;
             break;
     }
-}
+} */
 function drawBox()
 {
     quad( CanonVertices[1], CanonVertices[0], CanonVertices[3], CanonVertices[2], CanonVertices[0] );
@@ -212,14 +212,14 @@ function initializeTexture( myImage, fileName, id) {
     }
     myImage[id].src = fileName;
 }
-function tetrahedron(a, b, c, d, e, f, g, h, count) {
+/* function tetrahedron(a, b, c, d, e, f, g, h, count) {
     divide_quad(CanonVertices[a], CanonVertices[b], CanonVertices[c], CanonVertices[d], count);
     divide_quad(CanonVertices[d], CanonVertices[c], CanonVertices[g], CanonVertices[h], count);
     divide_quad(CanonVertices[h], CanonVertices[g], CanonVertices[f], CanonVertices[e], count);
     divide_quad(CanonVertices[e], CanonVertices[f], CanonVertices[b], CanonVertices[a], count);
-}
+} */
 
-function divide_quad(a, b, c, d, count) {
+/* function divide_quad(a, b, c, d, count) {
 
   // grab all the x and z points
   var xa = a[0];
@@ -254,7 +254,7 @@ function divide_quad(a, b, c, d, count) {
       else {
         quad( a, b, c, d );
       }
-}
+} */
 
 function quad(a, b, c, d)
 {
