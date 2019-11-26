@@ -4,7 +4,7 @@
 //   Date:     November 13, 2019
 //   Class:    CSCI343, Professor Royden
 //
-//   Purpose:  apply a texture to all sides of a cube
+//   Purpose:  pirate moves around ocean
 //************************************************************
 var canvas;
 var gl;
