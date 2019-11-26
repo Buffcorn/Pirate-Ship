@@ -14,7 +14,6 @@ var pMatrix;
 
 var NumVertices = 0;
 
-
 var cylinderVert = 0;
 
 var projection;
@@ -27,7 +26,7 @@ var numTex = 2; // texture coordinates
 var texCoordsArray = []; //texel points 
 var texture = [ ]; 
 var image = [ ]; 
-//====================================
+//boat coordinates
 var xPosBoat = -150; 
 var yPosBoat = -150;
 var zPosBoat = -581;
@@ -82,7 +81,7 @@ window.onload = function init()
     
     
      
-    //==========================================
+    //creating texture buffer
     var tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
@@ -114,6 +113,7 @@ window.onload = function init()
     render();
     
 }
+// key responses for moving boat
 /* function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
    switch (key) {
@@ -135,6 +135,7 @@ window.onload = function init()
             break;
     }
 } */
+
 function drawBox()
 {
     quad( CanonVertices[1], CanonVertices[0], CanonVertices[3], CanonVertices[2], CanonVertices[0] );
@@ -276,6 +277,7 @@ function quad(a, b, c, d)
         colors.push(0.0, 0.0, 0.0, 1.0);
     }
 }
+// automated boat movement
 function moveBoat() {
 //-145, -145
 	if (xPosBoat <= -150  && yPosBoat <= 150) {
