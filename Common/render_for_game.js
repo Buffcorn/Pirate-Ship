@@ -34,7 +34,6 @@ function render_boat() {
      gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
 }
 function render_Cannon() {
-
     cMatrix = mat4();
     cMatrix = perspective(45.0, 1.0, 1.0, 800); // right
     cMatrix = mult(cMatrix, translate(0, 0, -400));

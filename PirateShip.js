@@ -86,7 +86,6 @@ window.onload = function init()
     
     textureScene();
     drawBox();
-    console.log(NumVertices);
     console.log(points.length);
     tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
     console.log(points.length);
@@ -336,39 +335,13 @@ function render()
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     
     //for ocean
-    pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-    pMatrix = mult(pMatrix, translate(0, 0, -582));
-    gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
-    gl.uniform3fv(thetaLoc, theta); // differ    
-
-
-     // texture mapping for ocean
-     gl.bindTexture( gl.TEXTURE_2D, texture[0]);
-     gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
+    render_Background(thetaLoc, theta, texture, NumVertices, projection);
 
      //boat stuff
-     moveBoat();
-     pMatrix = mat4();
-     pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-     
-
-
-     pMatrix = mult(pMatrix, translate(xPosBoat, yPosBoat, -581));
-     pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
-
-     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
-     
-     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
-     gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
-
+     render_boat();
 
      //cannon stuff 
-     cMatrix = mat4();
-     cMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-     cMatrix = mult(cMatrix, translate(0, 0, -400));
-     cMatrix = mult(cMatrix, scalem(.4, .4, 1.0));
-     gl.uniformMatrix4fv( projection, false, flatten(cMatrix) ); 
-     gl.drawArrays(gl.TRIANGLES, 72, 96);
+     render_Cannon();
 
     requestAnimFrame( render );
 }
