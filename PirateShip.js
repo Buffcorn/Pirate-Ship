@@ -31,10 +31,22 @@ var numTex = 2; // texture coordinates
 var texCoordsArray = []; //texel points 
 var texture = [ ]; 
 var image = [ ]; 
-//boat coordinates
-var xPos = 0; 
-var yPos = 0;
+
+//*****Boat and Cannon Variables to Keep Track of*****//
+var xPos = -60; 
+var yPos = 120;
+var zPosBoat = -580;
+var zPosCannon = -465;
 var angle = 45;
+var PerspectiveCheck = 0;
+var CanonRotateZ = 0;
+var depthOcean = 0;
+var BoatRotatex = 0;
+var BoatRotatey = 0;
+var BoatDepth = -125;
+var CannonDepth = -125;
+var CannonDepthZ = 0;
+//***************************************************//
 
 var xAxis = 0;
 var yAxis = 1;
@@ -42,6 +54,7 @@ var zAxis = 2;
 
 var axis = 0;
 var theta = [ 0, 0, 0 ];
+
 
 var thetaLoc;
 var texCoord = [
@@ -51,7 +64,7 @@ var texCoord = [
         vec2(1, 0)
 ];
 var CanonVertices = [
-    vec4( -10, -50,  10, 1.0 ), //0 
+    	vec4( -10, -50,  10, 1.0 ), //0 
         vec4( -10,  50,  10, 1.0 ), // 1
         vec4(  10,  50,  10, 1.0 ), // 2
         vec4(  10, -50,  10, 1.0 ), // 3
@@ -79,11 +92,49 @@ window.onload = function init()
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
+//**************************BUTTONS ON HTML**************************//
+    var Perspective1Check = 0;
     document.getElementById("Perspective1").onclick = function () {
-        xPos = 0; 
-        yPos = 0;
-	angle = 45;
+	if (Perspective1Check == 0) {
+		PerspectiveCheck = 0; //Change for the wasd control. 
+		angle = 45;
+		depthOcean = 0;
+		theta = [ 0, 0, 0 ];
+		BoatRotatex = 0;
+		BoatRotatey = 0;
+		BoatDepth = -125;
+		xPos = -60; 	
+		yPos = 120;
+		zPosBoat = -580;
+		zPosCannon = -465;
+		Perspective1Check = 1; //Making sure you can only click Perspective 1 once. 
+		Perspective2Check = 0;
+		CanonRotateZ = 0;
+		CannonDepth = -125;
+		CannonDepthZ = 0;
+
+	}
     };
+    
+    var Perspective2Check = 0;
+    document.getElementById("Perspective2").onclick = function () {
+	if (Perspective2Check == 0){
+		theta[0] += 90.0;
+		depthOcean = -150;
+		BoatRotatex = 90;
+		BoatRotatey = 180;
+		BoatDepth = -230;
+		xPos = 0; 
+        	yPos = 0;
+		PerspectiveCheck = 1; //Change for the wasd control.
+		Perspective2Check = 1; //Making sure you can only click Perspective 2 once.
+		Perspective1Check = 0; 
+		CanonRotateZ = 180;
+		CannonDepth = -25;
+		CannonDepthZ = -110;
+	}
+    };
+//*******************************************************************//
     
     textureScene();
     drawBox();
@@ -158,11 +209,21 @@ window.onload = function init()
             break;          
 	  case 'S':
 	  case 's':
-            yPos -= 2.0;
+            if (PerspectiveCheck == 0) {
+            	yPos -= 2.0;
+	    } else if (PerspectiveCheck == 1) {
+            	zPosCannon += 2.0;
+		zPosBoat += 2.0;
+	    }
             break;
 	  case 'W':
 	  case 'w':
-            yPos += 2.0;
+	    if (PerspectiveCheck == 0) {
+            	yPos += 2.0;
+	    } else if (PerspectiveCheck == 1) {
+            	zPosCannon -= 2.0;
+		zPosBoat -= 2.0;
+	    }
             break;
 	  case 'a':
 	  case 'A':
