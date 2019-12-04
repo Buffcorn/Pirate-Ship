@@ -25,7 +25,8 @@ function render_boat() {
      }*/
      
      pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-     pMatrix = mult(pMatrix, translate(xPos, yPos, -581));
+     pMatrix = mult(pMatrix, translate(xPos, yPos, -580));
+     pMatrix = mult(pMatrix, translate(-105, -125, 0));
      pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
@@ -44,8 +45,8 @@ function render_Cannon() {
      }*/
     cMatrix = mat4();
     cMatrix = perspective(45.0, 1.0, 1.0, 800); // right
-    cMatrix = mult(cMatrix, translate(xPos, yPos, -400));
-    //cMatrix = mult(cMatrix, translate(-105, -125, -400));
+    cMatrix = mult(cMatrix, translate(xPos, yPos, -465));
+    cMatrix = mult(cMatrix, translate(-90, -125, 0));
     cMatrix = mult(cMatrix, rotate(90.0, 0.0, 0.0, 1.0));
     cMatrix = mult(cMatrix, scalem(.4, .4, 1.0));
     gl.bindTexture( gl.TEXTURE_2D, texture[2]);

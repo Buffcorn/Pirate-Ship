@@ -146,11 +146,6 @@ window.onload = function init()
             axis = xAxis;
             theta[axis] += 2.0;
             break;
-          case 'd': // spin on the x axis
-          case 'D':
-            axis = xAxis;
-            theta[axis] -= 2.0;
-            break;
           case 'j': // the y axis 
           case 'J':
             axis = yAxis;
@@ -166,9 +161,21 @@ window.onload = function init()
             axis = zAxis;
             theta[axis] += 2.0;
             break;          
+	  case 'S':
+	  case 's':
+            yPos -= 2.0;
+            break;
+	  case 'W':
+	  case 'w':
+            yPos += 2.0;
+            break;
 	  case 'a':
 	  case 'A':
-            yPos -= 2.0;
+            xPos -= 2.0;
+            break;	  
+	  case 'd':
+	  case 'D':
+            xPos += 2.0;
             break;
           case 'z':
           case 'Z':
