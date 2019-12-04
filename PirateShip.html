@@ -37,15 +37,25 @@ void main()
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
 <script type="text/javascript" src="Common/initShaders.js"></script>
 <script type="text/javascript" src="Common/MV.js"></script>
+<script type="text/javascript" src="cannon.js"></script>
+<script type="text/javascript" src="background.js"></script>
+<script type="text/javascript" src="render_for_game.js"></script>
 <script type="text/javascript" src="PirateShip.js"></script>
 
 <body>
 <canvas id="gl-canvas" width="750" height="512">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
-   
 <br/>
+ <script type="text/javascript">
+        textureScene();
+    	drawBox();
+    	tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
 
+    	render_Background();
+    	render_boat();
+    	render_cannon();
+    </script>
 <!--<button id= "Perspective1">Perspective 1</button>-->
 <button id= "Reset">Reset Game</button>
 <!--<button id= "Perspective3">Perspective 3</button>-->
