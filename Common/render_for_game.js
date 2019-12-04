@@ -1,7 +1,7 @@
 
 function render_Background(thetaLoc, theta, texture, NumVertices, projection) {
     var pMatrix = mat4();
-    pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
+    pMatrix = perspective(angle, 1.0, 1.0, 800); // right
     pMatrix = mult(pMatrix, translate(0, 0, -582));
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
@@ -11,20 +11,8 @@ function render_Background(thetaLoc, theta, texture, NumVertices, projection) {
     gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
 }
 
-function render_boat() {
-     /*if (xPosBoat <= -150  && yPosBoat <= 150) {
-        yPosBoat += 2;
-        
-     } else if (xPosBoat <= 150 && yPosBoat >= 150) {
-        xPosBoat += 2; 
-     } else if (xPosBoat >= 150 && yPosBoat >= -150) {
-        yPosBoat-= 2;
-        
-     } else {
-        xPosBoat-=2;
-     }*/
-     
-     pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
+function render_boat() {     
+     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
      pMatrix = mult(pMatrix, translate(xPos, yPos, -580));
      pMatrix = mult(pMatrix, translate(-105, -125, 0));
      pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
@@ -33,18 +21,8 @@ function render_boat() {
      gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
 }
 function render_Cannon() {  
-     /*if (xPosCannon <= -105  && yPosCannon <= 120) {
-        yPosCannon += 1.5;
-        
-     } else if (xPosCannon <= 105 && yPosCannon >= 120) {
-        xPosCannon += 1.5; 
-     } else if (xPosCannon >= 105 && yPosCannon >= -120) {
-        yPosCannon-= 1.5;        
-     } else {
-        xPosCannon-=1.5;
-     }*/
     cMatrix = mat4();
-    cMatrix = perspective(45.0, 1.0, 1.0, 800); // right
+    cMatrix = perspective(angle, 1.0, 1.0, 800); // right
     cMatrix = mult(cMatrix, translate(xPos, yPos, -465));
     cMatrix = mult(cMatrix, translate(-90, -125, 0));
     cMatrix = mult(cMatrix, rotate(90.0, 0.0, 0.0, 1.0));

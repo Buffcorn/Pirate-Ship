@@ -32,15 +32,9 @@ var texCoordsArray = []; //texel points
 var texture = [ ]; 
 var image = [ ]; 
 //boat coordinates
-var xPosBoat = -150; 
-var yPosBoat = -150;
-var zPosBoat = -581;
 var xPos = 0; 
 var yPos = 0;
-var zPos = 0;
-var xPosCannon = -105; 
-var yPosCannon = -125;
-var zPosCannon = -581;
+var angle = 45;
 
 var xAxis = 0;
 var yAxis = 1;
@@ -85,9 +79,10 @@ window.onload = function init()
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    document.getElementById("Reset").onclick = function () {
-        xPosBoat = -145; 
-        yPosBoat = -145;
+    document.getElementById("Perspective1").onclick = function () {
+        xPos = 0; 
+        yPos = 0;
+	angle = 45;
     };
     
     textureScene();
