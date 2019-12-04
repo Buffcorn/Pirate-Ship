@@ -126,6 +126,7 @@ window.onload = function init()
     //initialize textures
     initializeTexture(image, "ocean.jpg", 0);
     initializeTexture(image, "planks.jpg", 1);
+    initializeTexture(image, "black.png", 2);
 
     render();
     
@@ -139,13 +140,21 @@ window.onload = function init()
             axis = xAxis;
             theta[axis] += 2.0;
             break;
-
+          case 'd': // spin on the x axis
+          case 'D':
+            axis = xAxis;
+            theta[axis] -= 2.0;
+            break;
           case 'j': // the y axis 
           case 'J':
             axis = yAxis;
             theta[axis] += 2.0;
             break;
-
+          case 'h': // spin on the y axis
+          case 'H':
+            axis = yAxis;
+            theta[axis] -= 2.0;
+            break;
           case 'k': // the z axis 
           case 'K':
             axis = zAxis;
@@ -309,21 +318,7 @@ function quad(a, b, c, d)
         
     }
 }
-// automated boat movement
-function moveBoat() {
-//-145, -145
-	if (xPosBoat <= -150  && yPosBoat <= 150) {
-		yPosBoat += 2;
-		
-	} else if (xPosBoat <= 150 && yPosBoat >= 150) {
-		xPosBoat += 2; 
-	} else if (xPosBoat >= 150 && yPosBoat >= -150) {
-		yPosBoat-= 2;
-		
-	} else {
-		xPosBoat-=2;
-	}
-}
+
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
