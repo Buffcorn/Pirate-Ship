@@ -9,18 +9,23 @@
 var canvas;
 var gl;
 var program;
+
 var mvMatrix; 
 var pMatrix;
 
 var NumVertices = 0;
+var xTranl = 0; 
+var yTransl = 0; 
+var zTransl = 0;
 
-var cylinderVert = 0;
 
 var projection;
 
 var points = [];
+var colors_Tex = []; 
 var colors = [];
 
+var numCannon = 0;
 //variables needed for texture mapping
 var numTex = 2; // texture coordinates
 var texCoordsArray = []; //texel points 
@@ -30,6 +35,10 @@ var image = [ ];
 var xPosBoat = -150; 
 var yPosBoat = -150;
 var zPosBoat = -581;
+
+var xAxis = 0;
+var yAxis = 1;
+var zAxis = 2;
 
 var axis = 0;
 var theta = [ 0, 0, 0 ];
@@ -42,14 +51,14 @@ var texCoord = [
         vec2(1, 0)
 ];
 var CanonVertices = [
-    vec4( -100, -50,  100, 1.0 ),
-    vec4( -100,  50,  100, 1.0 ),
-    vec4(  100,  50,  100, 1.0 ),
-    vec4(  100, -50,  100, 1.0 ),
-    vec4( -100, -50, -100, 1.0 ),
-    vec4( -100,  50, -100, 1.0 ),
-    vec4(  100,  50, -100, 1.0 ),
-    vec4(  100, -50, -100, 1.0 )
+    vec4( -10, -50,  10, 1.0 ), //0 
+        vec4( -10,  50,  10, 1.0 ), // 1
+        vec4(  10,  50,  10, 1.0 ), // 2
+        vec4(  10, -50,  10, 1.0 ), // 3
+        vec4( -10, -50, -10, 1.0 ), // 4
+        vec4( -10,  50, -10, 1.0 ), // 5
+        vec4(  10,  50, -10, 1.0 ), // 6
+        vec4(  10, -50, -10, 1.0 )
 ];
 
 window.onload = function init()
@@ -77,19 +86,24 @@ window.onload = function init()
     
     textureScene();
     drawBox();
-    //tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
-    
+    console.log(NumVertices);
+    console.log(points.length);
+    tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
+    console.log(points.length);
     
      
     //creating texture buffer
     var tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
-
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(colors_Tex), gl.STATIC_DRAW );
+    
+    // var cBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer );
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
+    
     var vTexCoord = gl.getAttribLocation( program, "vTexCoord" );
     gl.vertexAttribPointer( vTexCoord, 2, gl.FLOAT, false, 0, 0 ); 
     gl.enableVertexAttribArray( vTexCoord );
-
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
@@ -99,12 +113,16 @@ window.onload = function init()
     gl.vertexAttribPointer( vPosition, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
 
+        //creating color buffer 
+    
+
+
     thetaLoc = gl.getUniformLocation(program, "theta");
     modelView = gl.getUniformLocation( program, "modelView" ); 
     projection = gl.getUniformLocation( program, "projection" );
     //event listeners for buttons
     
-    //window.onkeydown = keyResponse;
+    window.onkeydown = keyResponse;
 
     //initialize textures
     initializeTexture(image, "ocean.jpg", 0);
@@ -114,27 +132,31 @@ window.onload = function init()
     
 }
 // key responses for moving boat
-/* function keyResponse(event) {
+  function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
-   switch (key) {
-        case 'a':
-        case 'A':
-            xTranl-=30.0;
+        switch(key) {
+          case 'f': // spin on the x axis
+          case 'F':
+            axis = xAxis;
+            theta[axis] += 2.0;
             break;
-        case 'd':
-        case 'D': 
-            xTranl+=30.0;
+
+          case 'j': // the y axis 
+          case 'J':
+            axis = yAxis;
+            theta[axis] += 2.0;
             break;
-        case 'w':
-        case 'W':
-            yTransl+=30.0;
+
+          case 'k': // the z axis 
+          case 'K':
+            axis = zAxis;
+            theta[axis] += 2.0;
             break;
-        case 's':
-        case 'S':
-            yTransl-=30.0;
-            break;
-    }
-} */
+          case 'z':
+          case 'Z':
+          	zTransl+=5.0;
+        }
+}
 
 function drawBox()
 {
@@ -187,22 +209,34 @@ function textureScene()
 function scene(a, b, c, d) 
 {
     points.push( a ); // 4
-    texCoordsArray.push( texCoord[0] );    
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[0] );  
+    colors_Tex.push(texCoord[0]);   
     
     points.push( b);
-    texCoordsArray.push( texCoord[1] );  // 5  
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[1] );  // 5  
+    colors_Tex.push(texCoord[1]);   
 
     points.push( c );
-    texCoordsArray.push( texCoord[2] );  // 6   
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[2] );  // 6   
+    colors_Tex.push(texCoord[2]);   
 
     points.push( a );
-    texCoordsArray.push( texCoord[0] ); // 4    
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[0] ); // 4    
+    colors_Tex.push(texCoord[0]);   
 
     points.push( c ); // 6 
-    texCoordsArray.push( texCoord[2] );    
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[2] ); 
+    colors_Tex.push(texCoord[2]);      
 
     points.push( d ); // 7
-    texCoordsArray.push( texCoord[3] ); 
+    // colors.push(vec4(0, 0, 0, 0));
+    // texCoordsArray.push( texCoord[3] ); 
+    colors_Tex.push(texCoord[3]);   
     NumVertices += 6;
 }
 
@@ -213,14 +247,14 @@ function initializeTexture( myImage, fileName, id) {
     }
     myImage[id].src = fileName;
 }
-/* function tetrahedron(a, b, c, d, e, f, g, h, count) {
+ function tetrahedron(a, b, c, d, e, f, g, h, count) {
     divide_quad(CanonVertices[a], CanonVertices[b], CanonVertices[c], CanonVertices[d], count);
     divide_quad(CanonVertices[d], CanonVertices[c], CanonVertices[g], CanonVertices[h], count);
     divide_quad(CanonVertices[h], CanonVertices[g], CanonVertices[f], CanonVertices[e], count);
     divide_quad(CanonVertices[e], CanonVertices[f], CanonVertices[b], CanonVertices[a], count);
-} */
+} 
 
-/* function divide_quad(a, b, c, d, count) {
+ function divide_quad(a, b, c, d, count) {
 
   // grab all the x and z points
   var xa = a[0];
@@ -235,7 +269,7 @@ function initializeTexture( myImage, fileName, id) {
   var y1 = b[1]; // top y coordinate
   var y2 = a[1]; // bottom y coordinate
 
-  var distance = Math.sqrt(0.02);
+  var distance = Math.sqrt(200);
   var normal = distance/Math.sqrt((xa*xa) + (za*za));
   var ad = vec4((xa+xd)/2.0, y2, (za+zd)/2.0, 1.0); // Bottom mid point
   var bc = vec4((xb+xc)/2.0, y1, (zb+zc)/2.0, 1.0); // Top mid point
@@ -255,7 +289,7 @@ function initializeTexture( myImage, fileName, id) {
       else {
         quad( a, b, c, d );
       }
-} */
+} 
 
 function quad(a, b, c, d)
 {
@@ -270,11 +304,10 @@ function quad(a, b, c, d)
 
     for ( var i = 0; i < indices.length; ++i ) {
         points.push( indices[i] );
-        
-        // colors.push( vertexColors[indices[i]] );
 
-        // for solid colored faces use
-        colors.push(0.0, 0.0, 0.0, 1.0);
+        //colors.push(vec4( 0.0, 0.0,  0.0, 1.0 ));
+        colors_Tex.push(vec4(1.0, 0.0, 0.0, 1.0));   
+        
     }
 }
 // automated boat movement
@@ -287,12 +320,10 @@ function moveBoat() {
 		xPosBoat += 2; 
 	} else if (xPosBoat >= 150 && yPosBoat >= -150) {
 		yPosBoat-= 2;
-		console.log("case 3");
+		
 	} else {
 		xPosBoat-=2;
 	}
-	console.log(xPosBoat);
-	console.log(yPosBoat);
 }
 function render()
 {
@@ -304,24 +335,20 @@ function render()
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     
-    
+    //for ocean
     pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
     pMatrix = mult(pMatrix, translate(0, 0, -582));
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
 
 
-
-   	//console.log(NumVertices/numTex);
-     
-     //boat and texture map on boat 
-     //xPosBoat yO
-     moveBoat();
-
+     // texture mapping for ocean
      gl.bindTexture( gl.TEXTURE_2D, texture[0]);
      gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
 
-     pMatrix = mat4
+     //boat stuff
+     moveBoat();
+     pMatrix = mat4();
      pMatrix = perspective(45.0, 1.0, 1.0, 800); // right
      
 
@@ -330,12 +357,18 @@ function render()
      pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
 
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
-
      
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, 0*NumVertices/numTex, NumVertices);
 
 
+     //cannon stuff 
+     cMatrix = mat4();
+     cMatrix = perspective(45.0, 1.0, 1.0, 800); // right
+     cMatrix = mult(cMatrix, translate(0, 0, -400));
+     cMatrix = mult(cMatrix, scalem(.4, .4, 1.0));
+     gl.uniformMatrix4fv( projection, false, flatten(cMatrix) ); 
+     gl.drawArrays(gl.TRIANGLES, 72, 96);
 
     requestAnimFrame( render );
 }
