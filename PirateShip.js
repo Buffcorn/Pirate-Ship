@@ -35,6 +35,12 @@ var image = [ ];
 var xPosBoat = -150; 
 var yPosBoat = -150;
 var zPosBoat = -581;
+var xPos = 0; 
+var yPos = 0;
+var zPos = 0;
+var xPosCannon = -105; 
+var yPosCannon = -125;
+var zPosCannon = -581;
 
 var xAxis = 0;
 var yAxis = 1;
@@ -159,6 +165,10 @@ window.onload = function init()
           case 'K':
             axis = zAxis;
             theta[axis] += 2.0;
+            break;          
+	  case 'a':
+	  case 'A':
+            yPos -= 2.0;
             break;
           case 'z':
           case 'Z':
