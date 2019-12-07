@@ -40,10 +40,10 @@ var image = [ ];
 //*****Boat and Cannon Variables to Keep Track of*****//
 var xPosBoat = -160; 
 var yPosBoat = -10;
-var xPos = 10; 
+var xPos = -60; 
 var yPos = 120;
-var zPosBoat = -375;
-var zPosCannon = -340;
+var zPosBoat = -475;
+var zPosCannon = -465;
 var boatAngle = 90;
 var scaleBoat = .65;
 var angle = 45;
@@ -191,7 +191,7 @@ window.onload = function init()
     countVertices[1] = numVerticiesCount; // will contain 39 so the amount to draw the ship
     startVerticesCount[2] = points.length;
     //startVerticesCount[2]
-    console.log(points.length);
+    
     numVerticiesCount = 0;
 
     tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
@@ -311,6 +311,7 @@ function pewpew() {
 	  case 's':
             if (PerspectiveCheck == 0) {
             	yPos -= 2.0;
+            	yPosBoat -= 2.0;
 		        LazerY -= 2.0;
 	    } else if (PerspectiveCheck == 1) {
             	zPosCannon += 2.0;
@@ -322,6 +323,7 @@ function pewpew() {
 	  case 'w':
 	    if (PerspectiveCheck == 0) {
             	yPos += 2.0;
+            	yPosBoat += 2.0;
 		LazerY += 2.0;
 	    } else if (PerspectiveCheck == 1) {
             	zPosCannon -= 2.0;
@@ -331,23 +333,27 @@ function pewpew() {
             break;
 	  case 'a':
 	  case 'A':
+	  		xPosBoat -= 2.0;
             xPos -= 2.0;
-	    LazerX -= 2.0;
-	    temp = xPos;
+	    	LazerX -= 2.0;
+	    	temp = xPos;
             break;	  
 	  case 'd':
 	  case 'D':  
 	    if (PerspectiveCheck == 0) {
             	xPos += 2.0;
-	    	LazerX += 2.0;
-	    	temp = xPos;
+            	xPosBoat += 2.0;
+	    		LazerX += 2.0;
+	    		temp = xPos;
+	    		
 	    } else if (PerspectiveCheck == 1) {
             	xPos += 2.0;
-	    	LazerX += 2.0;
-	    	temp = xPos;
+	    		LazerX += 2.0;
+	    		temp = xPos;
 	    }
             break;
         }
+       
 }
 
 

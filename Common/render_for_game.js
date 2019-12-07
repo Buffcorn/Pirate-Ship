@@ -34,9 +34,10 @@ function render_Cannon(NumVertices, StartingVertices) {
     cMatrix = mult(cMatrix, translate(-90, CannonDepth, CannonDepthZ));
     cMatrix = mult(cMatrix, rotate(CannonRotateX, CannonRotateY, CannonRotateZ, 1.0));
     cMatrix = mult(cMatrix, scalem(.4, .4, .3));
-    gl.bindTexture( gl.TEXTURE_2D, texture[2]);
     gl.uniformMatrix4fv( projection, false, flatten(cMatrix) ); 
+    gl.bindTexture( gl.TEXTURE_2D, texture[2]);
     gl.drawArrays(gl.TRIANGLES, StartingVertices, NumVertices);
+    
 
 }
 
@@ -59,7 +60,7 @@ function shoot_laser(NumVertices) {
      pMatrix = mult(pMatrix, scalem(.05, .02, .01));
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
      gl.bindTexture( gl.TEXTURE_2D, texture[4]);
-     gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
+     gl.drawArrays( gl.TRIANGLES, 0, countVertices[0]);
 }
 
 function render() {
