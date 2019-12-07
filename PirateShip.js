@@ -38,11 +38,11 @@ var texture = [ ];
 var image = [ ]; 
 
 //*****Boat and Cannon Variables to Keep Track of*****//
-var xPosBoat = -160; 
+var xPosBoat = -290; 
 var yPosBoat = -10;
 var xPos = -60; 
 var yPos = 120;
-var zPosBoat = -475;
+var zPosBoat = -500;
 var zPosCannon = -465;
 var boatAngle = 90;
 var scaleBoat = .65;
@@ -53,10 +53,12 @@ var CannonRotateZ = 0;
 var depthOcean = 0;
 var BoatRotatex = 120;
 var BoatRotatey = 1;
+var BoatRotatez = 1;
 var BoatDepth = -125;
 var CannonDepth = -125;
 var CannonDepthZ = 0;
 var CannonRotateX = 90;
+var OceanX = 0;
 //***************************************************//
 
 var xAxis = 0;
@@ -82,7 +84,7 @@ var sandDepthY = 0;
 //*************************//
 
 //***** Lazer Variables *****//
-var LazerX = -120; //
+var LazerX = -145; //
 var LazerY = -5;
 var LazerZ = -467;
 var LazerRotateX = 0;
@@ -115,21 +117,19 @@ window.onload = function init()
 	if (Perspective1Check == 0) {
 		PerspectiveCheck = 0; //Change for the wasd control. 
 		angle = 45;
-		boatAngle = 45;
-
+		boatAngle = 90;
 		depthOcean = 0;
 		theta = [ 0, 0, 0 ];
 		BoatDepth = -125;
-		xPos = -10; 
+		xPos = -60; 
 		yPos = 120;
-		xPosBoat = -200; 
+		xPosBoat = -290; 
 	    yPosBoat = -10;
-		zPosBoat = -580;
+		zPosBoat = -500;
 		zPosCannon = -465;
 		BoatRotatex = 120.0;
-        BoatRotatey = 1.0;
-        scaleBoat = .65;
-
+        	BoatRotatey = 1.0;
+        	scaleBoat = .65;
 		Perspective1Check = 1; //Making sure you can only click Perspective 1 once. 
 		Perspective2Check = 0;
 		CannonRotateZ = 0;
@@ -138,10 +138,11 @@ window.onload = function init()
 		CannonDepth = -125;
 		CannonDepthZ = 0;
 		LazerRotateX = 0;
-		LazerX = -120; 
-		LazerY = 0;
+		LazerX = -145; 
+		LazerY = -5;
 		LazerZ = -467;
-
+		BoatRotatez = 1;
+		OceanX = 0;
 	}
     };
     
@@ -153,15 +154,16 @@ window.onload = function init()
 		BoatRotatex = 90;
 		BoatRotatey = 180;
 		BoatDepth = -230;
-		xPos = 0; 
-        yPos = 0;
-        xPosBoat = -230; 
+		xPos = -20; 
+        	yPos = 11;
+		xPosBoat = -200; 
 		yPosBoat = -75;
-		zPosBoat = -380; 
+		zPosBoat = -535; 
 		BoatRotatex = 90;
-        BoatRotatey = -40.0;
-        boatAngle = 90;
-        scaleBoat = .60;
+        	BoatRotatey = 0;
+		BoatRotatez = 0;
+        	boatAngle = 90;
+        	scaleBoat = .60;
 
 		PerspectiveCheck = 1; //Change for the wasd control.
 		Perspective2Check = 1; //Making sure you can only click Perspective 2 once.
@@ -170,12 +172,13 @@ window.onload = function init()
 		CannonRotateX = 90;
 		CannonRotateY = 0;
 		CannonDepth = -25;
-		CannonDepthZ = -110;
+		CannonDepthZ = -50;
 		sandDepthY = -145;
 		LazerRotateX = 0;
-		LazerX = -90; 
-		LazerY = -25;
-		LazerZ = -575;
+		LazerX = -110; 
+		LazerY = -15;
+		LazerZ = -517;
+		OceanX = -100;
 	}
     };
 //*******************************************************************//
@@ -264,12 +267,12 @@ function pewpew() {
 		} else if (PerspectiveCheck == 1) {
 			LazerX += 10;	
 			LazerPosition += 10;		
-			LazerY = LazerPosition * Math.tan(LazerRotateX*Math.PI/180)-25;
+			LazerY = LazerPosition * Math.tan(LazerRotateX*Math.PI/180)-15;
                 	setTimeout(pewpew, 20);
 		}
 	} else {
 		if (PerspectiveCheck == 0) {
-			LazerX = xPos-120; 
+			LazerX = xPos-90; 
 			LazerY = yPos-125; // added
 	    	} else if (PerspectiveCheck == 1) {
 			LazerX = xPos - 90;
@@ -310,46 +313,69 @@ function pewpew() {
 	  case 'S':
 	  case 's':
             if (PerspectiveCheck == 0) {
-            	yPos -= 2.0;
-            	yPosBoat -= 2.0;
-		        LazerY -= 2.0;
+		if(yPos >= -30) {
+            		yPos -= 2.0;
+            		yPosBoat -= 4.85;
+			LazerY -= 2.0;
+		}
 	    } else if (PerspectiveCheck == 1) {
-            	zPosCannon += 2.0;
+		if(zPosBoat <= -379) {
+            		zPosCannon += 2.0;
 		        zPosBoat += 2.0;
-		LazerZ += 2.0;
+			LazerZ += 2.0;
+		}
 	    }
             break;
 	  case 'W':
 	  case 'w':
 	    if (PerspectiveCheck == 0) {
-            	yPos += 2.0;
-            	yPosBoat += 2.0;
-		LazerY += 2.0;
+		if(yPos <= 280) {
+            		yPos += 2.0;
+            		yPosBoat += 4.85;
+			LazerY += 2.0;
+		}
 	    } else if (PerspectiveCheck == 1) {
-            	zPosCannon -= 2.0;
-		zPosBoat -= 2.0;
-		LazerZ -= 2.0;
+            	if (zPosBoat >= -641) {
+			zPosCannon -= 2.0;
+			zPosBoat -= 2.0;
+			LazerZ -= 2.0;
+		}
 	    }
             break;
 	  case 'a':
 	  case 'A':
-	  		xPosBoat -= 2.0;
-            xPos -= 2.0;
-	    	LazerX -= 2.0;
-	    	temp = xPos;
+	    if (PerspectiveCheck == 0) {
+            	if ( xPos >= -60) {	
+			xPosBoat -= 4.85;
+            		xPos -= 2.0;
+	    		LazerX -= 2.0;
+	    		temp = xPos;
+            	}
+	    } else if (PerspectiveCheck == 1) {
+		if ( xPos >= -50) {	
+			xPosBoat -= 4.85;
+            		xPos -= 2.0;
+	    		LazerX -= 2.0;
+	    		temp = xPos;
+            		}
+	    }
             break;	  
 	  case 'd':
 	  case 'D':  
 	    if (PerspectiveCheck == 0) {
-            	xPos += 2.0;
-            	xPosBoat += 2.0;
+		if(xPos <= 130) {
+			xPos += 2.0;
+            		xPosBoat += 4.85;
 	    		LazerX += 2.0;
 	    		temp = xPos;
-	    		
+		}	    		
 	    } else if (PerspectiveCheck == 1) {
-            	xPos += 2.0;
+		if (xPos < 80) {            	
+			xPosBoat += 4.85;
+			xPos += 2.0;
 	    		LazerX += 2.0;
 	    		temp = xPos;
+		}	    
 	    }
             break;
         }
@@ -379,7 +405,7 @@ function render()
      shoot_laser(countVertices[0]);
 
      //Land
-     render_Land(countVertices[0]);
+     //render_Land(countVertices[0]);
 
      //cannon stuff 
      

@@ -43,5 +43,8 @@ function drawBoat()
 
     boat(verticesBoat[7], verticesBoat[8], verticesBoat[5]);
     boat(verticesBoat[5], verticesBoat[7], verticesBoat[6]);
+    //top side of boat
+    boat(verticesBoat[4], verticesBoat[6], verticesBoat[1]);
+    boat(verticesBoat[1], verticesBoat[7], verticesBoat[6]);
 
 }
