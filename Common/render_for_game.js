@@ -39,7 +39,10 @@ function render_Cannon(NumVertices, StartingVertices) {
 function render_Land(NumVertices) {
     var pMatrix = mat4();
     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
-    pMatrix = mult(pMatrix, translate(300, -100, -560));
+    pMatrix = mult(pMatrix, translate(landx, landy, landz));
+ 
+    // translate for ocean => y = depthOcean and z =>  -581 for projection 0
+    // translate for ocean=>   z=> 
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
 
@@ -58,14 +61,15 @@ function shoot_laser(NumVertices) {
      gl.drawArrays( gl.TRIANGLES, 0, countVertices[0]);
 }
 
-function render() {
-    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    mvMatrix = mat4( );
-    /*mvMatrix = mult(mvMatrix, rotate(theta[0], 1.0, 0.0, 0.0));
-    mvMatrix = mult(mvMatrix, rotate(theta[1], 0.0, 1.0, 0.0));
-    mvMatrix = mult(mvMatrix, rotate(theta[2], 0.0, 0.0, 1.0));
-    */gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
-    
-    
-    requestAnimFrame( render );
+function render_Enemy(NumVertices) {
+    var pMatrix = mat4();
+    pMatrix = perspective(angle, 1.0, 1.0, 800); // right
+    pMatrix = mult(pMatrix, translate(enemyX, enemyY, enemyZ));
+    pMatrix = mult(pMatrix, scalem(.02, .04, .04));
+    gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
+    gl.uniform3fv(thetaLoc, theta); // differ    
+
+     // texture mapping for ocean
+    gl.bindTexture( gl.TEXTURE_2D, texture[2]);
+    gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
 }

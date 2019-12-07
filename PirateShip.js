@@ -91,6 +91,15 @@ var LazerRotateX = 0;
 var LazerPosition = 0;
 var temp = 0;
 
+//***********Land*************//
+var sandDepthY = 0;
+var landx = 320; 
+var landy = depthOcean;
+var landz = -581; 
+//***************************//
+var enemyX = 120;
+var enemyY = 0; 
+var enemyZ = -450;
 //***************************//
 
 window.onload = function init()
@@ -143,6 +152,9 @@ window.onload = function init()
 		LazerZ = -467;
 		BoatRotatez = 1;
 		OceanX = 0;
+		landx = 320; 
+        landy = depthOcean;
+        landz = -581; 
 	}
     };
     
@@ -179,8 +191,22 @@ window.onload = function init()
 		LazerY = -15;
 		LazerZ = -517;
 		OceanX = -100;
+
+		landx = 300; 
+        landy = -149;
+        landz = -581; 
 	}
     };
+    document.getElementById("Reset_Enemy").onclick = function () {
+    		enemyX = 120;
+    		if (PerspectiveCheck == 0) {
+    			enemyY = Math.floor((Math.random() * 290) + -145);
+    		} else {
+    			enemyY = Math.floor(Math.random() * 145);
+    		}
+    		//enemyY = 149;
+    	
+    }
 //*******************************************************************//
     startVerticesCount[0] = points.length; // will contain zero for starting 
     // to push into draw array
@@ -242,7 +268,7 @@ window.onload = function init()
     initializeTexture(image, "ocean.jpg", 0);
     initializeTexture(image, "planks.jpg", 1);
     initializeTexture(image, "black.png", 2);
-    initializeTexture(image, "Sand.png", 3);
+    initializeTexture(image, "sand.jpg", 3);
     initializeTexture(image, "red.png", 4);
 
     render();
@@ -260,10 +286,28 @@ function Shoot(event) {
 }
 
 function pewpew() {
-	if (LazerX < 200) {
+
+		
+	if (enemyX <= LazerX && enemyX+10 >= LazerX && LazerY >= enemyY-10 && LazerY <= enemyY+10 ) {
+		console.log(enemyX);
+		console.log("hit");
+		console.log(LazerX);
+		if (PerspectiveCheck == 0) {
+			LazerX = xPos-90; 
+			LazerY = yPos-125; // added
+	    	} else if (PerspectiveCheck == 1 && LazerY >= enemyY-10 && LazerY <= enemyY+10) {
+			LazerX = xPos - 90;
+			LazerPosition = 0;
+			LazerY = yPos - 25; 
+	    	}
+	    	enemyX = 300;    
+	    	 
+         	setTimeout(document.getElementById("Reset_Enemy").onclick, 1000);
+
+	} else if (LazerX < 200) {
 		if (PerspectiveCheck == 0) {
 			LazerX += 10;
-                	setTimeout(pewpew, 20);
+            setTimeout(pewpew, 20);
 		} else if (PerspectiveCheck == 1) {
 			LazerX += 10;	
 			LazerPosition += 10;		
@@ -280,6 +324,7 @@ function pewpew() {
 			LazerY = yPos - 25; 
 	    	}
 	}
+
 }
 
 // key responses for moving boat
@@ -316,7 +361,7 @@ function pewpew() {
 		if(yPos >= -30) {
             		yPos -= 2.0;
             		yPosBoat -= 4.85;
-			LazerY -= 2.0;
+					LazerY -= 2.0;
 		}
 	    } else if (PerspectiveCheck == 1) {
 		if(zPosBoat <= -379) {
@@ -405,8 +450,9 @@ function render()
      shoot_laser(countVertices[0]);
 
      //Land
-     //render_Land(countVertices[0]);
+     render_Land(countVertices[0]);
 
+     render_Enemy(countVertices[0]);
      //cannon stuff 
      
 
