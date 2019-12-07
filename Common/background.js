@@ -50,7 +50,7 @@ function scene(a, b, c, d) {
     points.push( d ); // 7
     colors_Tex.push(texCoord[3]);   
 
-    NumVertices += 6;
+    numVerticiesCount += 6;
 }
 
 function initializeTexture( myImage, fileName, id) {

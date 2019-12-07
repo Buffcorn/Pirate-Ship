@@ -71,6 +71,7 @@ function quad(a, b, c, d)
         colors_Tex.push(vec4(1.0, 0.0, 0.0, 1.0));   
         
     }
+    numVerticiesCount+=6;
 }
 
 function drawBox()

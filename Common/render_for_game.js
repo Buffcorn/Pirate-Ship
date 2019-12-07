@@ -11,17 +11,23 @@ function render_Background(thetaLoc, theta, texture, NumVertices, projection) {
     gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
 }
 
-function render_boat() {     
-     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
-     pMatrix = mult(pMatrix, translate(xPos, yPos, zPosBoat));
-     pMatrix = mult(pMatrix, translate(-105, BoatDepth, 0));
-     pMatrix = mult(pMatrix, rotate(BoatRotatex, BoatRotatey, 0.0, 1.0));
-     pMatrix = mult(pMatrix, scalem(.08, .08, 1.0));
+function render_boat(NumVertices, StartingVertices) {     
+     pMatrix = perspective(boatAngle, 1.0, 1.0, 800); // right
+
+     pMatrix = mult(pMatrix, translate(xPosBoat, yPosBoat, zPosBoat));
+     pMatrix = mult(pMatrix, rotate(BoatRotatex, BoatRotatey, 1.0, 1.0));
+     pMatrix = mult(pMatrix, scalem(scaleBoat, scaleBoat, scaleBoat));
+     // 
+     //pMatrix = mult(pMatrix, translate(70.0, -30.0, 800.0, 1.0));
+     // pMatrix = mult(pMatrix, translate(xPos, yPos, zPosBoat));
+     // pMatrix = mult(pMatrix, translate(-105, BoatDepth, 0));
+     // pMatrix = mult(pMatrix, rotate(BoatRotatex, BoatRotatey, 0.0, 1.0));
+     
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
-     gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
+     gl.drawArrays( gl.TRIANGLES, StartingVertices, NumVertices);
 }
-function render_Cannon() {  
+function render_Cannon(NumVertices, StartingVertices) {  
     cMatrix = mat4();
     cMatrix = perspective(angle, 1.0, 1.0, 800); // right
     cMatrix = mult(cMatrix, translate(xPos, yPos, zPosCannon));
@@ -30,11 +36,11 @@ function render_Cannon() {
     cMatrix = mult(cMatrix, scalem(.4, .4, .3));
     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
     gl.uniformMatrix4fv( projection, false, flatten(cMatrix) ); 
-    gl.drawArrays(gl.TRIANGLES, 72, 96);
+    gl.drawArrays(gl.TRIANGLES, StartingVertices, NumVertices);
 
 }
 
-function render_Land() {
+function render_Land(NumVertices) {
     var pMatrix = mat4();
     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
     pMatrix = mult(pMatrix, translate(300, -100, -560));
@@ -46,7 +52,7 @@ function render_Land() {
     gl.drawArrays( gl.TRIANGLES, 0, NumVertices);
 }
 
-function shoot_laser() {
+function shoot_laser(NumVertices) {
      pMatrix = perspective(angle, 1.0, 1.0, 800); // right
      pMatrix = mult(pMatrix, translate(LazerX, LazerY, LazerZ));
      pMatrix = mult(pMatrix, rotate(LazerRotateX, 0, 0, 1.0));

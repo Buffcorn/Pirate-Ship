@@ -14,14 +14,17 @@ var mvMatrix;
 var pMatrix;
 
 var NumVertices = 0;
-var LandVertices = 0;
+var numVerticiesCount = 0; 
+var startVerticesCount = []; 
+var countVertices = []; 
+// var LandVertices = 0;
 var xTranl = 0; 
 var yTransl = 0; 
 var zTransl = 0;
 
 
 var projection;
-
+var is_Persp_1 = true; 
 var pointsland = [];
 var points = [];
 var colors_Tex = []; 
@@ -35,17 +38,21 @@ var texture = [ ];
 var image = [ ]; 
 
 //*****Boat and Cannon Variables to Keep Track of*****//
-var xPos = -60; 
+var xPosBoat = -160; 
+var yPosBoat = -10;
+var xPos = 10; 
 var yPos = 120;
-var zPosBoat = -580;
-var zPosCannon = -465;
+var zPosBoat = -375;
+var zPosCannon = -340;
+var boatAngle = 90;
+var scaleBoat = .65;
 var angle = 45;
 var PerspectiveCheck = 0;
 var CannonRotateY = 0;
 var CannonRotateZ = 0;
 var depthOcean = 0;
-var BoatRotatex = 0;
-var BoatRotatey = 0;
+var BoatRotatex = 120;
+var BoatRotatey = 1;
 var BoatDepth = -125;
 var CannonDepth = -125;
 var CannonDepthZ = 0;
@@ -75,7 +82,7 @@ var sandDepthY = 0;
 //*************************//
 
 //***** Lazer Variables *****//
-var LazerX = -143; 
+var LazerX = -120; //
 var LazerY = -5;
 var LazerZ = -467;
 var LazerRotateX = 0;
@@ -108,15 +115,21 @@ window.onload = function init()
 	if (Perspective1Check == 0) {
 		PerspectiveCheck = 0; //Change for the wasd control. 
 		angle = 45;
+		boatAngle = 45;
+
 		depthOcean = 0;
 		theta = [ 0, 0, 0 ];
-		BoatRotatex = 0;
-		BoatRotatey = 0;
 		BoatDepth = -125;
-		xPos = -60; 	
+		xPos = -10; 
 		yPos = 120;
+		xPosBoat = -200; 
+	    yPosBoat = -10;
 		zPosBoat = -580;
 		zPosCannon = -465;
+		BoatRotatex = 120.0;
+        BoatRotatey = 1.0;
+        scaleBoat = .65;
+
 		Perspective1Check = 1; //Making sure you can only click Perspective 1 once. 
 		Perspective2Check = 0;
 		CannonRotateZ = 0;
@@ -125,9 +138,10 @@ window.onload = function init()
 		CannonDepth = -125;
 		CannonDepthZ = 0;
 		LazerRotateX = 0;
-		LazerX = -143; 
-		LazerY = -5;
+		LazerX = -120; 
+		LazerY = 0;
 		LazerZ = -467;
+
 	}
     };
     
@@ -140,7 +154,15 @@ window.onload = function init()
 		BoatRotatey = 180;
 		BoatDepth = -230;
 		xPos = 0; 
-        	yPos = 0;
+        yPos = 0;
+        xPosBoat = -230; 
+		yPosBoat = -75;
+		zPosBoat = -380; 
+		BoatRotatex = 90;
+        BoatRotatey = -40.0;
+        boatAngle = 90;
+        scaleBoat = .60;
+
 		PerspectiveCheck = 1; //Change for the wasd control.
 		Perspective2Check = 1; //Making sure you can only click Perspective 2 once.
 		Perspective1Check = 0; 
@@ -157,11 +179,24 @@ window.onload = function init()
 	}
     };
 //*******************************************************************//
-    
+    startVerticesCount[0] = points.length; // will contain zero for starting 
+    // to push into draw array
+
     textureScene();
-    drawBox();
+    countVertices[0] = numVerticiesCount; // will contain 36 so the amount to draw background
+    startVerticesCount[1] = points.length; // where to start for pushing the next object for draw 
+                                               // draw arrays 
+    numVerticiesCount = 0; // reseting to call next function 
+    drawBoat(); //  
+    countVertices[1] = numVerticiesCount; // will contain 39 so the amount to draw the ship
+    startVerticesCount[2] = points.length;
+    //startVerticesCount[2]
+    console.log(points.length);
+    numVerticiesCount = 0;
+
     tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
-    
+    countVertices[2] = numVerticiesCount;
+    startVerticesCount[3] = points.length;
      
     //creating texture buffer
     var tBuffer = gl.createBuffer();
@@ -234,7 +269,8 @@ function pewpew() {
 		}
 	} else {
 		if (PerspectiveCheck == 0) {
-			LazerX = xPos - 100; 
+			LazerX = xPos-120; 
+			LazerY = yPos-125; // added
 	    	} else if (PerspectiveCheck == 1) {
 			LazerX = xPos - 90;
 			LazerPosition = 0;
@@ -275,10 +311,10 @@ function pewpew() {
 	  case 's':
             if (PerspectiveCheck == 0) {
             	yPos -= 2.0;
-		LazerY -= 2.0;
+		        LazerY -= 2.0;
 	    } else if (PerspectiveCheck == 1) {
             	zPosCannon += 2.0;
-		zPosBoat += 2.0;
+		        zPosBoat += 2.0;
 		LazerZ += 2.0;
 	    }
             break;
@@ -297,7 +333,7 @@ function pewpew() {
 	  case 'A':
             xPos -= 2.0;
 	    LazerX -= 2.0;
-	    temp = xPos
+	    temp = xPos;
             break;	  
 	  case 'd':
 	  case 'D':  
@@ -326,19 +362,21 @@ function render()
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
     
     //for ocean
-    render_Background(thetaLoc, theta, texture, NumVertices, projection);
+    render_Background(thetaLoc, theta, texture, countVertices[0], projection);
 
      //boat stuff
-     render_boat();
+     render_boat(countVertices[1], startVerticesCount[1]);
 
+     render_Cannon(countVertices[2], startVerticesCount[2]);
+     
      //Laser
-     shoot_laser();
+     shoot_laser(countVertices[0]);
 
      //Land
-     render_Land();
+     render_Land(countVertices[0]);
 
      //cannon stuff 
-     render_Cannon();
+     
 
 
 
