@@ -14,6 +14,7 @@ var mvMatrix;
 var pMatrix;
 
 var NumVertices = 0;
+var LandVertices = 0;
 var xTranl = 0; 
 var yTransl = 0; 
 var zTransl = 0;
@@ -21,6 +22,7 @@ var zTransl = 0;
 
 var projection;
 
+var pointsland = [];
 var points = [];
 var colors_Tex = []; 
 var colors = [];
@@ -39,13 +41,15 @@ var zPosBoat = -580;
 var zPosCannon = -465;
 var angle = 45;
 var PerspectiveCheck = 0;
-var CanonRotateZ = 0;
+var CannonRotateY = 0;
+var CannonRotateZ = 0;
 var depthOcean = 0;
 var BoatRotatex = 0;
 var BoatRotatey = 0;
 var BoatDepth = -125;
 var CannonDepth = -125;
 var CannonDepthZ = 0;
+var CannonRotateX = 90;
 //***************************************************//
 
 var xAxis = 0;
@@ -63,16 +67,22 @@ var texCoord = [
         vec2(1, 1),
         vec2(1, 0)
 ];
-var CanonVertices = [
-    	vec4( -10, -50,  10, 1.0 ), //0 
-        vec4( -10,  50,  10, 1.0 ), // 1
-        vec4(  10,  50,  10, 1.0 ), // 2
-        vec4(  10, -50,  10, 1.0 ), // 3
-        vec4( -10, -50, -10, 1.0 ), // 4
-        vec4( -10,  50, -10, 1.0 ), // 5
-        vec4(  10,  50, -10, 1.0 ), // 6
-        vec4(  10, -50, -10, 1.0 )
-];
+
+
+//***** Sand Variables *****//
+var sandDepthY = 0;
+
+//*************************//
+
+//***** Lazer Variables *****//
+var LazerX = -143; 
+var LazerY = -5;
+var LazerZ = -467;
+var LazerRotateX = 0;
+var LazerPosition = 0;
+var temp = 0;
+
+//***************************//
 
 window.onload = function init()
 {
@@ -109,10 +119,15 @@ window.onload = function init()
 		zPosCannon = -465;
 		Perspective1Check = 1; //Making sure you can only click Perspective 1 once. 
 		Perspective2Check = 0;
-		CanonRotateZ = 0;
+		CannonRotateZ = 0;
+		CannonRotateY = 0;
+		CannonRotateX = 90;
 		CannonDepth = -125;
 		CannonDepthZ = 0;
-
+		LazerRotateX = 0;
+		LazerX = -143; 
+		LazerY = -5;
+		LazerZ = -467;
 	}
     };
     
@@ -129,18 +144,23 @@ window.onload = function init()
 		PerspectiveCheck = 1; //Change for the wasd control.
 		Perspective2Check = 1; //Making sure you can only click Perspective 2 once.
 		Perspective1Check = 0; 
-		CanonRotateZ = 180;
+		CannonRotateZ = 180;
+		CannonRotateX = 90;
+		CannonRotateY = 0;
 		CannonDepth = -25;
 		CannonDepthZ = -110;
+		sandDepthY = -145;
+		LazerRotateX = 0;
+		LazerX = -90; 
+		LazerY = -25;
+		LazerZ = -575;
 	}
     };
 //*******************************************************************//
     
     textureScene();
     drawBox();
-    console.log(points.length);
     tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
-    console.log(points.length);
     
      
     //creating texture buffer
@@ -158,6 +178,10 @@ window.onload = function init()
 
     var vBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW );    
+
+    var landBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, landBuffer );
     gl.bufferData( gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW );
 
     var vPosition = gl.getAttribLocation( program, "vPosition" );
@@ -174,223 +198,122 @@ window.onload = function init()
     //event listeners for buttons
     
     window.onkeydown = keyResponse;
+    window.onkeypress = Shoot;
 
     //initialize textures
     initializeTexture(image, "ocean.jpg", 0);
     initializeTexture(image, "planks.jpg", 1);
     initializeTexture(image, "black.png", 2);
+    initializeTexture(image, "Sand.png", 3);
+    initializeTexture(image, "red.png", 4);
 
     render();
     
 }
+
+function Shoot(event) {
+    var key = String.fromCharCode(event.keyCode);
+        switch(key) {
+	  case 'p':
+	  case 'P':
+		pewpew();
+	    break;
+        }
+}
+
+function pewpew() {
+	if (LazerX < 200) {
+		if (PerspectiveCheck == 0) {
+			LazerX += 10;
+                	setTimeout(pewpew, 20);
+		} else if (PerspectiveCheck == 1) {
+			LazerX += 10;	
+			LazerPosition += 10;		
+			LazerY = LazerPosition * Math.tan(LazerRotateX*Math.PI/180)-25;
+                	setTimeout(pewpew, 20);
+		}
+	} else {
+		if (PerspectiveCheck == 0) {
+			LazerX = xPos - 100; 
+	    	} else if (PerspectiveCheck == 1) {
+			LazerX = xPos - 90;
+			LazerPosition = 0;
+			LazerY = yPos - 25; 
+	    	}
+	}
+}
+
 // key responses for moving boat
   function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
         switch(key) {
-          case 'f': // spin on the x axis
-          case 'F':
-            axis = xAxis;
-            theta[axis] += 2.0;
-            break;
-          case 'j': // the y axis 
-          case 'J':
-            axis = yAxis;
-            theta[axis] += 2.0;
-            break;
-          case 'h': // spin on the y axis
-          case 'H':
-            axis = yAxis;
-            theta[axis] -= 2.0;
-            break;
-          case 'k': // the z axis 
-          case 'K':
-            axis = zAxis;
-            theta[axis] += 2.0;
-            break;          
+	  case 'q':
+	  case 'Q':
+	    if (PerspectiveCheck == 0) {
+		//CannonRotateZ -= .05;
+	    } else if (PerspectiveCheck == 1) {
+            	if (CannonRotateY >= -200){
+			LazerRotateX += 2.5;
+			CannonRotateY -= 10;
+	    	}
+	    }
+            break;	  
+	  case 'e':
+	  case 'E':            
+	    if (PerspectiveCheck == 0) {
+		//if (CannonRotateZ >= -1){
+		//	CannonRotateZ -= 0.05;
+	    	//}
+	    } else if (PerspectiveCheck == 1) {
+            	if (CannonRotateY <= -10){
+			LazerRotateX -= 2.5;
+			CannonRotateY += 10;
+	    	}
+	    }
+            break;	  
 	  case 'S':
 	  case 's':
             if (PerspectiveCheck == 0) {
             	yPos -= 2.0;
+		LazerY -= 2.0;
 	    } else if (PerspectiveCheck == 1) {
             	zPosCannon += 2.0;
 		zPosBoat += 2.0;
+		LazerZ += 2.0;
 	    }
             break;
 	  case 'W':
 	  case 'w':
 	    if (PerspectiveCheck == 0) {
             	yPos += 2.0;
+		LazerY += 2.0;
 	    } else if (PerspectiveCheck == 1) {
             	zPosCannon -= 2.0;
 		zPosBoat -= 2.0;
+		LazerZ -= 2.0;
 	    }
             break;
 	  case 'a':
 	  case 'A':
             xPos -= 2.0;
+	    LazerX -= 2.0;
+	    temp = xPos
             break;	  
 	  case 'd':
-	  case 'D':
-            xPos += 2.0;
+	  case 'D':  
+	    if (PerspectiveCheck == 0) {
+            	xPos += 2.0;
+	    	LazerX += 2.0;
+	    	temp = xPos;
+	    } else if (PerspectiveCheck == 1) {
+            	xPos += 2.0;
+	    	LazerX += 2.0;
+	    	temp = xPos;
+	    }
             break;
-          case 'z':
-          case 'Z':
-          	zTransl+=5.0;
         }
 }
 
-function drawBox()
-{
-    quad( CanonVertices[1], CanonVertices[0], CanonVertices[3], CanonVertices[2], CanonVertices[0] );
-    quad( CanonVertices[2], CanonVertices[3], CanonVertices[7], CanonVertices[6], CanonVertices[1] );
-    quad( CanonVertices[4], CanonVertices[5], CanonVertices[6], CanonVertices[7], CanonVertices[2] );
-    quad( CanonVertices[5], CanonVertices[4], CanonVertices[0], CanonVertices[1], CanonVertices[3] );
-    quad( CanonVertices[1], CanonVertices[2], CanonVertices[6], CanonVertices[5], CanonVertices[4] );
-    quad( CanonVertices[0], CanonVertices[4], CanonVertices[7], CanonVertices[3], CanonVertices[5] );
-
-
-}
-function configureTexture(image, id) {
-    texture[id] = gl.createTexture(); 
-    gl.bindTexture( gl.TEXTURE_2D, texture[id] );
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image ); 
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST);
-
-    
-    //gl.texParameteri(gl.TEXTURE_2D. gl.TEXTURE_WRAP_S, gl.REPEAT);
-    gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
-}
-function textureScene()
-{  
-    
-    var verticesScene = [
-        vec4( -200.0, -200.0,  100.0 , 1.0 ), // 0
-        vec4( -200.0,  200.0,  100.0 , 1.0 ), // 1
-        vec4(  200.0,  200.0,  100.0 , 1.0 ), // 2
-        vec4(  200.0, -200.0,  100.0 , 1.0 ),  // 3
-
-        vec4( -200.0, -200.0, -100.0 , 1.0 ), // 4  front view but bottom view
-        vec4( -200.0,  200.0, -100.0 , 1.0 ), // 5
-        vec4(  200.0,  200.0, -100.0 , 1.0 ), // 6
-        vec4(  200.0, -200.0, -100.0 , 1.0 ) // 7
-]
-    
-    scene( verticesScene[1], verticesScene[0], verticesScene[3], verticesScene[2] ); // 
-    scene( verticesScene[2], verticesScene[3], verticesScene[7], verticesScene[6] ); // 
-    scene( verticesScene[3], verticesScene[0], verticesScene[4], verticesScene[7] ); // 
-    scene( verticesScene[6], verticesScene[5], verticesScene[1], verticesScene[2] ); // 
-    scene( verticesScene[4], verticesScene[5], verticesScene[6], verticesScene[7] ); // 
-    scene( verticesScene[5], verticesScene[4], verticesScene[0], verticesScene[1] );
-
-
-}
-function scene(a, b, c, d) 
-{
-    points.push( a ); // 4
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[0] );  
-    colors_Tex.push(texCoord[0]);   
-    
-    points.push( b);
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[1] );  // 5  
-    colors_Tex.push(texCoord[1]);   
-
-    points.push( c );
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[2] );  // 6   
-    colors_Tex.push(texCoord[2]);   
-
-    points.push( a );
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[0] ); // 4    
-    colors_Tex.push(texCoord[0]);   
-
-    points.push( c ); // 6 
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[2] ); 
-    colors_Tex.push(texCoord[2]);      
-
-    points.push( d ); // 7
-    // colors.push(vec4(0, 0, 0, 0));
-    // texCoordsArray.push( texCoord[3] ); 
-    colors_Tex.push(texCoord[3]);   
-    NumVertices += 6;
-}
-
-function initializeTexture( myImage, fileName, id) {
-    myImage[id] = new Image();
-    myImage[id].onload = function() {
-        configureTexture(myImage[id], id);
-    }
-    myImage[id].src = fileName;
-}
- function tetrahedron(a, b, c, d, e, f, g, h, count) {
-    divide_quad(CanonVertices[a], CanonVertices[b], CanonVertices[c], CanonVertices[d], count);
-    divide_quad(CanonVertices[d], CanonVertices[c], CanonVertices[g], CanonVertices[h], count);
-    divide_quad(CanonVertices[h], CanonVertices[g], CanonVertices[f], CanonVertices[e], count);
-    divide_quad(CanonVertices[e], CanonVertices[f], CanonVertices[b], CanonVertices[a], count);
-} 
-
- function divide_quad(a, b, c, d, count) {
-
-  // grab all the x and z points
-  var xa = a[0];
-  var za = a[2];
-  var xb = b[0];
-  var zb = b[2];
-  var xc = c[0];
-  var zc = c[2];
-  var xd = d[0];
-  var zd = d[2];
-
-  var y1 = b[1]; // top y coordinate
-  var y2 = a[1]; // bottom y coordinate
-
-  var distance = Math.sqrt(200);
-  var normal = distance/Math.sqrt((xa*xa) + (za*za));
-  var ad = vec4((xa+xd)/2.0, y2, (za+zd)/2.0, 1.0); // Bottom mid point
-  var bc = vec4((xb+xc)/2.0, y1, (zb+zc)/2.0, 1.0); // Top mid point
-
-  var normalizedBot = distance / (Math.sqrt(ad[0] * ad[0] + ad[2] * ad[2]));
-  var normalizedTop = distance / (Math.sqrt(bc[0] * bc[0] + bc[2] * bc[2]));
-
-
-    if ( count > 0 ) {
-
-        ad = vec4(ad[0] * normalizedBot, y2, ad[2] * normalizedBot, 1.0);
-        bc = vec4(bc[0] * normalizedTop, y1, bc[2] * normalizedTop, 1.0);
-
-        divide_quad(a, b, bc, ad, count - 1);
-        divide_quad(ad, bc, c, d, count - 1);
-      }
-      else {
-        quad( a, b, c, d );
-      }
-} 
-
-function quad(a, b, c, d)
-{
-
-    // We need to parition the quad into two triangles in order for
-    // WebGL to be able to render it.  In this case, we create two
-    // triangles from the quad indices
-
-    //vertex color assigned by the index of the vertex
-
-    var indices = [ a, b, c, a, c, d ];
-
-    for ( var i = 0; i < indices.length; ++i ) {
-        points.push( indices[i] );
-
-        //colors.push(vec4( 0.0, 0.0,  0.0, 1.0 ));
-        colors_Tex.push(vec4(1.0, 0.0, 0.0, 1.0));   
-        
-    }
-}
 
 function render()
 {
@@ -408,8 +331,16 @@ function render()
      //boat stuff
      render_boat();
 
+     //Laser
+     shoot_laser();
+
+     //Land
+     render_Land();
+
      //cannon stuff 
      render_Cannon();
+
+
 
     requestAnimFrame( render );
 }

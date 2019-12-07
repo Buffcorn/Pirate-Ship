@@ -6,14 +6,10 @@ function configureTexture(image, id) {
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST);
-
-    
-    //gl.texParameteri(gl.TEXTURE_2D. gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
 }
 
-function textureScene()
-{  
+function textureScene() {  
     
     var verticesScene = [
         vec4( -200.0, -200.0,  100.0 , 1.0 ), // 0
@@ -35,8 +31,7 @@ function textureScene()
     scene( verticesScene[5], verticesScene[4], verticesScene[0], verticesScene[1] );
 }
 
-function scene(a, b, c, d) 
-{
+function scene(a, b, c, d) {
     points.push( a ); // 4
     colors_Tex.push(texCoord[0]);   
     

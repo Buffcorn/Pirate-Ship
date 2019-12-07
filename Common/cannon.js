@@ -1,4 +1,15 @@
-function tetrahedron(a, b, c, d, e, f, g, h, count, CanonVertices) {
+var CanonVertices = [
+    	vec4( -10, -50,  10, 1.0 ), //0 
+        vec4( -10,  50,  10, 1.0 ), // 1
+        vec4(  10,  50,  10, 1.0 ), // 2
+        vec4(  10, -50,  10, 1.0 ), // 3
+        vec4( -10, -50, -10, 1.0 ), // 4
+        vec4( -10,  50, -10, 1.0 ), // 5
+        vec4(  10,  50, -10, 1.0 ), // 6
+        vec4(  10, -50, -10, 1.0 )
+];
+
+function tetrahedron(a, b, c, d, e, f, g, h, count) {
     divide_quad(CanonVertices[a], CanonVertices[b], CanonVertices[c], CanonVertices[d], count);
     divide_quad(CanonVertices[d], CanonVertices[c], CanonVertices[g], CanonVertices[h], count);
     divide_quad(CanonVertices[h], CanonVertices[g], CanonVertices[f], CanonVertices[e], count);
@@ -62,7 +73,7 @@ function quad(a, b, c, d)
     }
 }
 
-function drawBox(CanonVertices)
+function drawBox()
 {
     
     quad( CanonVertices[1], CanonVertices[0], CanonVertices[3], CanonVertices[2], CanonVertices[0] );
