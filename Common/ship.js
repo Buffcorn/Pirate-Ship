@@ -1,5 +1,14 @@
+// functions used to create the boat
+// some functions used from previus 
+// front_boaat is not in Pirate-Ship 
+// since other functions do not need it 
+ // most of variables other than from the 
+ // the parameter from PirateShip.js
+
 function front_boat(a, b, c) 
 {
+    // push in for the front of the boat's 
+    // vertices and texture vertices
     points.push( a ); // 4
     // colors.push(vec4(0, 0, 0, 0));
     // texCoordsArray.push( texCoord[0] );  

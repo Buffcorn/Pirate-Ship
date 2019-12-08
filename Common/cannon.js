@@ -1,3 +1,9 @@
+// the file is exclusively only used to create the cannon
+// which is a cylinder. Adjusted the distance of the dividequad 
+// to create the cylinder used in the project while using 
+// our preexisting code of when creating a cylinder 
+// most of variables other than from the 
+ // the parameter from PirateShip.js
 var CanonVertices = [
     	vec4( -10, -50,  10, 1.0 ), //0 
         vec4( -10,  50,  10, 1.0 ), // 1
@@ -49,30 +55,9 @@ function tetrahedron(a, b, c, d, e, f, g, h, count) {
         divide_quad(ad, bc, c, d, count - 1);
       }
       else {
-        quad( a, b, c, d );
+        makeSides( a, b, c, d );
       }
 } 
-
-function quad(a, b, c, d)
-{
-
-    // We need to parition the quad into two triangles in order for
-    // WebGL to be able to render it.  In this case, we create two
-    // triangles from the quad indices
-
-    //vertex color assigned by the index of the vertex
-
-    var indices = [ a, b, c, a, c, d ];
-
-    for ( var i = 0; i < indices.length; ++i ) {
-        points.push( indices[i] );
-
-        //colors.push(vec4( 0.0, 0.0,  0.0, 1.0 ));
-        Tex_coord.push(vec4(1.0, 0.0, 0.0, 1.0));   
-        
-    }
-    numVerticiesCount+=6;
-}
 
 function drawBox()
 {
