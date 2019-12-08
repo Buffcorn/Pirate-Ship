@@ -100,6 +100,17 @@ var landz = -581;
 var enemyX = 120;
 var enemyY = 0; 
 var enemyZ = -450;
+//**********Sound****************//
+var pewpewSound = new Audio(); 
+pewpewSound.src = "Common/pewpew.mp3";
+// function preload() {
+// 	soundFormats('mp3', 'ogg');
+// 	pewpewSound = loadSound('Common/Watashi.mp3');
+// }
+// function setup() {
+//   pewpewSound.setVolume(0.1);
+//   pewpewSound.play();
+// }
 //***************************//
 
 window.onload = function init()
@@ -155,6 +166,7 @@ window.onload = function init()
 		landx = 320; 
         landy = depthOcean;
         landz = -581; 
+        
 	}
     };
     
@@ -195,6 +207,8 @@ window.onload = function init()
 		landx = 300; 
         landy = -149;
         landz = -581; 
+        
+        
 	}
     };
     document.getElementById("Reset_Enemy").onclick = function () {
@@ -226,7 +240,8 @@ window.onload = function init()
     tetrahedron(0, 1, 2, 3, 4, 5, 6, 7, 2);
     countVertices[2] = numVerticiesCount;
     startVerticesCount[3] = points.length;
-     
+    
+    
     //creating texture buffer
     var tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
@@ -276,22 +291,23 @@ window.onload = function init()
 }
 
 function Shoot(event) {
+	pewpewSound.src = "Common/pewpew.mp3";
     var key = String.fromCharCode(event.keyCode);
         switch(key) {
 	  case 'p':
 	  case 'P':
+	  	pewpewSound.play();
 		pewpew();
 	    break;
-        }
+        }  
+    
 }
 
 function pewpew() {
-
+	
 		
 	if (enemyX <= LazerX && enemyX+10 >= LazerX && LazerY >= enemyY-10 && LazerY <= enemyY+10 ) {
-		console.log(enemyX);
-		console.log("hit");
-		console.log(LazerX);
+		
 		if (PerspectiveCheck == 0) {
 			LazerX = xPos-90; 
 			LazerY = yPos-125; // added
@@ -303,7 +319,7 @@ function pewpew() {
 	    	enemyX = 300;    
 	    	 
          	setTimeout(document.getElementById("Reset_Enemy").onclick, 1000);
-
+         	
 	} else if (LazerX < 200) {
 		if (PerspectiveCheck == 0) {
 			LazerX += 10;
@@ -324,7 +340,7 @@ function pewpew() {
 			LazerY = yPos - 25; 
 	    	}
 	}
-
+	
 }
 
 // key responses for moving boat
