@@ -23,8 +23,25 @@ function render_boat() {
      pMatrix = mult(pMatrix, scalem(scaleBoat, scaleBoat, scaleBoat));
      
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
+
+    
+
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
-     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1], countVertices[1]);
+     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1], 12);
+
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 12, 6);
+     
+
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 18, 6);
+     
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 24, 6);
+     
+     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
+     gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 30, 6);
+
 }
 function render_Cannon() {  
     cMatrix = mat4();

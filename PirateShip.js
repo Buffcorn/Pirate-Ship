@@ -275,6 +275,7 @@ window.onload = function init()
     initializeTexture(image, "black.png", 2);
     initializeTexture(image, "sand.jpg", 3);
     initializeTexture(image, "red.png", 4);
+    initializeTexture(image, "pirate.png", 5);
 
     render();
     
