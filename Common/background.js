@@ -23,34 +23,12 @@ function textureScene() {
         vec4(  200.0, -200.0, -100.0 , 1.0 ) // 7
 ]
     
-    scene( verticesScene[1], verticesScene[0], verticesScene[3], verticesScene[2] ); // 
-    scene( verticesScene[2], verticesScene[3], verticesScene[7], verticesScene[6] ); // 
-    scene( verticesScene[3], verticesScene[0], verticesScene[4], verticesScene[7] ); // 
-    scene( verticesScene[6], verticesScene[5], verticesScene[1], verticesScene[2] ); // 
-    scene( verticesScene[4], verticesScene[5], verticesScene[6], verticesScene[7] ); // 
-    scene( verticesScene[5], verticesScene[4], verticesScene[0], verticesScene[1] );
-}
-
-function scene(a, b, c, d) {
-    points.push( a ); // 4
-    colors_Tex.push(texCoord[0]);   
-    
-    points.push( b);
-    colors_Tex.push(texCoord[1]);  
-
-    points.push( c );
-    colors_Tex.push(texCoord[2]);   
-
-    points.push( a );
-    colors_Tex.push(texCoord[0]);   
-
-    points.push( c ); // 6 
-    colors_Tex.push(texCoord[2]);      
-
-    points.push( d ); // 7
-    colors_Tex.push(texCoord[3]);   
-
-    numVerticiesCount += 6;
+    makeSides( verticesScene[1], verticesScene[0], verticesScene[3], verticesScene[2] ); // 
+    makeSides( verticesScene[2], verticesScene[3], verticesScene[7], verticesScene[6] ); // 
+    makeSides( verticesScene[3], verticesScene[0], verticesScene[4], verticesScene[7] ); // 
+    makeSides( verticesScene[6], verticesScene[5], verticesScene[1], verticesScene[2] ); // 
+    makeSides( verticesScene[4], verticesScene[5], verticesScene[6], verticesScene[7] ); // 
+    makeSides( verticesScene[5], verticesScene[4], verticesScene[0], verticesScene[1] );
 }
 
 function initializeTexture( myImage, fileName, id) {

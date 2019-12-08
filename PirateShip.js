@@ -1,10 +1,17 @@
 //************************************************************
-// textureCube.js
-//   Author:   David Mendoza
-//   Date:     November 13, 2019
+// PirateShip.js
+//   Author:   Itaru Fujiwara, Kevin Smith, David Mendoza
+//   Date:     December 9th, 2019
 //   Class:    CSCI343, Professor Royden
 //
-//   Purpose:  pirate moves around ocean
+//   Purpose:  When you open the PirateShip.html you will start
+//             off in Perspective 1 where to move the ship you 
+//             you press W or w to move up, S or s to move down 
+//             , A or a to move to the left, D or d to move to 
+//             move to the right, and press P to fire a laser 
+//             with sound effects 
+//             Press Perspective 2 to view the ship from the side 
+//             where to move the ship W or w moves  
 //************************************************************
 var canvas;
 var gl;
@@ -27,7 +34,7 @@ var projection;
 var is_Persp_1 = true; 
 var pointsland = [];
 var points = [];
-var colors_Tex = []; 
+var Tex_coord = []; 
 var colors = [];
 
 var numCannon = 0;
@@ -40,10 +47,10 @@ var image = [ ];
 //*****Boat and Cannon Variables to Keep Track of*****//
 var xPosBoat = -290; 
 var yPosBoat = -10;
-var xPos = -60; 
+var xPos = -50; 
 var yPos = 120;
-var zPosBoat = -500;
-var zPosCannon = -465;
+var zPosBoat = -481;
+var zPosCannon = -449;
 var boatAngle = 90;
 var scaleBoat = .65;
 var angle = 45;
@@ -84,9 +91,9 @@ var sandDepthY = 0;
 //*************************//
 
 //***** Lazer Variables *****//
-var LazerX = -145; //
+var LazerX = -140; //
 var LazerY = -5;
-var LazerZ = -467;
+var LazerZ = -450;
 var LazerRotateX = 0;
 var LazerPosition = 0;
 var temp = 0;
@@ -141,15 +148,15 @@ window.onload = function init()
 		depthOcean = 0;
 		theta = [ 0, 0, 0 ];
 		BoatDepth = -125;
-		xPos = -60; 
+		xPos = -50; 
 		yPos = 120;
 		xPosBoat = -290; 
 	    yPosBoat = -10;
-		zPosBoat = -500;
-		zPosCannon = -465;
+		zPosBoat = -481;
+        zPosCannon = -449;
 		BoatRotatex = 120.0;
-        	BoatRotatey = 1.0;
-        	scaleBoat = .65;
+        BoatRotatey = 1.0;
+        scaleBoat = .65;
 		Perspective1Check = 1; //Making sure you can only click Perspective 1 once. 
 		Perspective2Check = 0;
 		CannonRotateZ = 0;
@@ -158,9 +165,10 @@ window.onload = function init()
 		CannonDepth = -125;
 		CannonDepthZ = 0;
 		LazerRotateX = 0;
-		LazerX = -145; 
+		LazerX = -140;
+		
 		LazerY = -5;
-		LazerZ = -467;
+		LazerZ = -450;
 		BoatRotatez = 1;
 		OceanX = 0;
 		landx = 320; 
@@ -178,16 +186,16 @@ window.onload = function init()
 		BoatRotatex = 90;
 		BoatRotatey = 180;
 		BoatDepth = -230;
-		xPos = -20; 
-        	yPos = 11;
+		xPos = -10; 
+        yPos = 11;
 		xPosBoat = -200; 
 		yPosBoat = -75;
 		zPosBoat = -535; 
 		BoatRotatex = 90;
-        	BoatRotatey = 0;
+        BoatRotatey = 0;
 		BoatRotatez = 0;
-        	boatAngle = 90;
-        	scaleBoat = .60;
+        boatAngle = 90;
+        scaleBoat = .60;
 
 		PerspectiveCheck = 1; //Change for the wasd control.
 		Perspective2Check = 1; //Making sure you can only click Perspective 2 once.
@@ -199,7 +207,7 @@ window.onload = function init()
 		CannonDepthZ = -50;
 		sandDepthY = -145;
 		LazerRotateX = 0;
-		LazerX = -110; 
+		LazerX = -105; 
 		LazerY = -15;
 		LazerZ = -517;
 		OceanX = -100;
@@ -233,6 +241,8 @@ window.onload = function init()
     drawBoat(); //  
     countVertices[1] = numVerticiesCount; // will contain 39 so the amount to draw the ship
     startVerticesCount[2] = points.length;
+    console.log(countVertices[1]);
+    console.log(points.length);
     //startVerticesCount[2]
     
     numVerticiesCount = 0;
@@ -245,7 +255,7 @@ window.onload = function init()
     //creating texture buffer
     var tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
-    gl.bufferData( gl.ARRAY_BUFFER, flatten(colors_Tex), gl.STATIC_DRAW );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(Tex_coord), gl.STATIC_DRAW );
     
     // var cBuffer = gl.createBuffer();
     // gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer );
@@ -300,7 +310,7 @@ function Shoot(event) {
 		pewpew();
 	    break;
         }  
-    
+    pewpewSound = new Audio();
 }
 
 function pewpew() {
@@ -346,12 +356,13 @@ function pewpew() {
 // key responses for moving boat
   function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
-        switch(key) {
+    switch(key) {
 	  case 'q':
 	  case 'Q':
 	    if (PerspectiveCheck == 0) {
-		//CannonRotateZ -= .05;
+		//no movement for the cannon in perspective 1
 	    } else if (PerspectiveCheck == 1) {
+	    	// move the cannon up in perspective 2
             	if (CannonRotateY >= -200){
 			LazerRotateX += 2.5;
 			CannonRotateY -= 10;
@@ -361,10 +372,9 @@ function pewpew() {
 	  case 'e':
 	  case 'E':            
 	    if (PerspectiveCheck == 0) {
-		//if (CannonRotateZ >= -1){
-		//	CannonRotateZ -= 0.05;
-	    	//}
+		// no movement for the cannon
 	    } else if (PerspectiveCheck == 1) {
+	    	// move the cannon down in perspective 2
             	if (CannonRotateY <= -10){
 			LazerRotateX -= 2.5;
 			CannonRotateY += 10;
@@ -373,39 +383,50 @@ function pewpew() {
             break;	  
 	  case 'S':
 	  case 's':
-            if (PerspectiveCheck == 0) {
-		if(yPos >= -30) {
-            		yPos -= 2.0;
-            		yPosBoat -= 4.85;
-					LazerY -= 2.0;
-		}
+	  	
+        if (PerspectiveCheck == 0) {
+        	// move the ship w/ the cannon 
+        	// down
+			if(yPos >= -30) {
+            	yPos -= 2.0;
+            	yPosBoat -= 4.85;
+				LazerY -= 2.0;
+			}
 	    } else if (PerspectiveCheck == 1) {
-		if(zPosBoat <= -379) {
-            		zPosCannon += 2.0;
-		        zPosBoat += 2.0;
-			LazerZ += 2.0;
-		}
+	    	// move the ship closer to the 
+	    	// edge of the ocean
+			if(zPosBoat <= -379) {
+	            zPosCannon += 2.0;
+			    zPosBoat += 2.0;
+				LazerZ += 2.0;
+			}
 	    }
             break;
 	  case 'W':
 	  case 'w':
 	    if (PerspectiveCheck == 0) {
-		if(yPos <= 280) {
-            		yPos += 2.0;
-            		yPosBoat += 4.85;
-			LazerY += 2.0;
-		}
+	    // move the ship w/ the cannon 
+        // up
+			if(yPos <= 280) {
+            	yPos += 2.0;
+            	yPosBoat += 4.85;
+				LazerY += 2.0;
+			}
 	    } else if (PerspectiveCheck == 1) {
-            	if (zPosBoat >= -641) {
-			zPosCannon -= 2.0;
-			zPosBoat -= 2.0;
-			LazerZ -= 2.0;
-		}
+	    	// move the ship further away 
+	    	// the edge of the ocean
+            if (zPosBoat >= -641) {
+				zPosCannon -= 2.0;
+				zPosBoat -= 2.0;
+				LazerZ -= 2.0;
+			}
 	    }
             break;
-	  case 'a':
-	  case 'A':
-	    if (PerspectiveCheck == 0) {
+        case 'a':
+	    case 'A':
+	    	if (PerspectiveCheck == 0) {
+	    	// move the ship w/ the cannon 
+        	// to the left
             	if ( xPos >= -60) {	
 			xPosBoat -= 4.85;
             		xPos -= 2.0;
@@ -413,17 +434,21 @@ function pewpew() {
 	    		temp = xPos;
             	}
 	    } else if (PerspectiveCheck == 1) {
-		if ( xPos >= -50) {	
-			xPosBoat -= 4.85;
-            		xPos -= 2.0;
+	    	// move the ship further from 
+	    	// the sand 
+			if ( xPos >= -50) {	
+				xPosBoat -= 4.85;
+            	xPos -= 2.0;
 	    		LazerX -= 2.0;
 	    		temp = xPos;
-            		}
+            }
 	    }
             break;	  
 	  case 'd':
 	  case 'D':  
 	    if (PerspectiveCheck == 0) {
+	    // move the ship w/ the cannon 
+        // to the right
 		if(xPos <= 130) {
 			xPos += 2.0;
             		xPosBoat += 4.85;
@@ -431,19 +456,45 @@ function pewpew() {
 	    		temp = xPos;
 		}	    		
 	    } else if (PerspectiveCheck == 1) {
-		if (xPos < 80) {            	
-			xPosBoat += 4.85;
-			xPos += 2.0;
+	    	// move the ship closer to 
+	    	// the sand 
+			if (xPos < 80) {            	
+				xPosBoat += 4.85;
+				xPos += 2.0;
 	    		LazerX += 2.0;
 	    		temp = xPos;
-		}	    
+			}	    
 	    }
             break;
         }
        
 }
+/****************/
+function makeSides(a, b, c, d) {
+	//used to create: rectangular prism of the ocean and 
+	// sand background and the enemy. Also used to make the 
+	// sides of the ship 
+    points.push( a ); // 4
+    Tex_coord.push(texCoord[0]);   
+    
+    points.push( b);
+    Tex_coord.push(texCoord[1]);  
 
+    points.push( c );
+    Tex_coord.push(texCoord[2]);   
 
+    points.push( a );
+    Tex_coord.push(texCoord[0]);   
+
+    points.push( c ); // 6 
+    Tex_coord.push(texCoord[2]);      
+
+    points.push( d ); // 7
+    Tex_coord.push(texCoord[3]);   
+
+    numVerticiesCount += 6;
+}
+/****************/
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -469,7 +520,7 @@ function render()
      render_Land(countVertices[0]);
 
      render_Enemy(countVertices[0]);
-     //cannon stuff 
+      
      
 
 

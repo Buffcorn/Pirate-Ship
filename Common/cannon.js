@@ -68,7 +68,7 @@ function quad(a, b, c, d)
         points.push( indices[i] );
 
         //colors.push(vec4( 0.0, 0.0,  0.0, 1.0 ));
-        colors_Tex.push(vec4(1.0, 0.0, 0.0, 1.0));   
+        Tex_coord.push(vec4(1.0, 0.0, 0.0, 1.0));   
         
     }
     numVerticiesCount+=6;
