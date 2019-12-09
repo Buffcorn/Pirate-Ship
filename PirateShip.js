@@ -20,6 +20,8 @@
 //             not go off screen or on the sand.
 //*******************************************************************
 var add1 = 1; 
+var directHits = 0;
+var highScore = 0;
 
 var canvas;
 var gl;
@@ -222,6 +224,22 @@ window.onload = function init()
     			enemyY = Math.floor(Math.random() * 163) + -18;
     		}
     }
+    	//resets the enemies location on the sand given a range 
+    	// for perspective 1 in the y direction is from -145 to 142
+
+    document.getElementById("New_Player").onclick = function () {
+	// resets score for new player
+	enemyY = 0;
+	directHits = 0;
+    }
+    
+    document.getElementById("End_Game").onclick = function () {
+	// ends game and displays high score
+	alert("The high score is " + highScore);
+	highScore = 0;
+	directHits = 0;
+	enemyY= 0;
+    }
 //*******************************************************************//
     startVerticesCount[0] = points.length; // will contain zero for starting 
   
@@ -317,7 +335,10 @@ function pewpew() {
 			LazerY = yPosCannon - 25; 
 	    }
 	    	enemyX = 300;  
-	    	
+
+	    	directHits ++;
+		if (directHits >= highScore) highScore = directHits;
+		console.log(directHits);
 	    	
          	setTimeout(document.getElementById("Reset_Enemy").onclick, 1000);
          	
