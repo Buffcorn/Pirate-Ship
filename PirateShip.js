@@ -143,12 +143,12 @@ window.onload = function init()
 		xPosCannon = -50; 
 		yPosCannon = 120;
 		xPosBoat = -290; 
-	    yPosBoat = -10;
+	        yPosBoat = -10;
 		zPosBoat = -481;
-        zPosCannon = -449;
+        	zPosCannon = -449;
 		BoatRotatex = 120.0;
-        BoatRotatey = 1.0;
-        scaleBoat = .65;
+        	BoatRotatey = 1.0;
+        	scaleBoat = .65;
 		Perspective1Check = 1; 
 		Perspective2Check = 0;
 		CannonRotateZ = 0;
@@ -209,7 +209,7 @@ window.onload = function init()
 		landx = 300; 
         landy = -149;
         landz = -599; 
-        
+        if (enemyY < 0) {enemyY = -enemyY;}
         
 	}
     };
