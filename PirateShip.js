@@ -19,9 +19,10 @@
 //             The boat has a limit in all direction so that it does 
 //             not go off screen or on the sand.
 //*******************************************************************
-var add1 = 1; 
 var directHits = 0;
 var highScore = 0;
+var numPlayer = 1;
+var highPlayer = 1;
 
 var canvas;
 var gl;
@@ -143,12 +144,12 @@ window.onload = function init()
 		xPosCannon = -50; 
 		yPosCannon = 120;
 		xPosBoat = -290; 
-	        yPosBoat = -10;
+	    yPosBoat = -10;
 		zPosBoat = -481;
-        	zPosCannon = -449;
+        zPosCannon = -449;
 		BoatRotatex = 120.0;
-        	BoatRotatey = 1.0;
-        	scaleBoat = .65;
+        BoatRotatey = 1.0;
+        scaleBoat = .65;
 		Perspective1Check = 1; 
 		Perspective2Check = 0;
 		CannonRotateZ = 0;
@@ -165,7 +166,7 @@ window.onload = function init()
 		OceanX = 0;
 		landx = 320; 
         landy = depthOcean;
-        landz = -581; 
+        landz = -599;
         
 	}
     };
@@ -211,7 +212,7 @@ window.onload = function init()
         landz = -599; 
         if (enemyY < 0) {enemyY = -enemyY;}
         
-	}
+		}
     };
     document.getElementById("Reset_Enemy").onclick = function () {
     	//resets the enemies location on the sand given a range 
@@ -224,21 +225,21 @@ window.onload = function init()
     			enemyY = Math.floor(Math.random() * 163) + -18;
     		}
     }
-    	//resets the enemies location on the sand given a range 
-    	// for perspective 1 in the y direction is from -145 to 142
-
-    document.getElementById("New_Player").onclick = function () {
+document.getElementById("New_Player").onclick = function () {
 	// resets score for new player
+	alert("Player " + numPlayer + ", your score is " + directHits);
 	enemyY = 0;
 	directHits = 0;
+	numPlayer += 1;
     }
     
     document.getElementById("End_Game").onclick = function () {
 	// ends game and displays high score
-	alert("The high score is " + highScore);
+	alert("The high score is " + highScore + ". Congratulations player " + highPlayer + "!");
 	highScore = 0;
 	directHits = 0;
 	enemyY= 0;
+	numPlayer = 1;
     }
 //*******************************************************************//
     startVerticesCount[0] = points.length; // will contain zero for starting 
@@ -298,7 +299,8 @@ window.onload = function init()
     initializeTexture(image, "black.png", 2);
     initializeTexture(image, "sand.jpg", 3);
     initializeTexture(image, "red.png", 4);
-    initializeTexture(image, "pirate.png", 5);
+    initializeTexture(image, "yell.jpg", 5);
+    initializeTexture(image, "slime.png", 6);
 
     render();
     
@@ -335,10 +337,12 @@ function pewpew() {
 			LazerY = yPosCannon - 25; 
 	    }
 	    	enemyX = 300;  
-
 	    	directHits ++;
-		if (directHits >= highScore) highScore = directHits;
-		console.log(directHits);
+			if (directHits >= highScore) {
+					highScore = directHits;
+					highPlayer = numPlayer;
+				}
+			
 	    	
          	setTimeout(document.getElementById("Reset_Enemy").onclick, 1000);
          	
@@ -416,7 +420,7 @@ function pewpew() {
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship closer to the 
 	    	// edge of the ocean
-			if(zPosBoat <= -400) {
+			if(zPosBoat <= -450) {
 	            zPosCannon += (1.79*3);
 			    zPosBoat += (2.5*3);
 				LazerZ += (1.79*3);
@@ -436,7 +440,7 @@ function pewpew() {
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship further away 
 	    	// the edge of the ocean
-            if (zPosBoat >= -641) {
+            if (zPosBoat >= -700) {
 				zPosCannon -= (1.79*3);
 				zPosBoat -= (2.5*3);
 				LazerZ -= (1.79*3);
@@ -546,8 +550,9 @@ function render()
 
      //draw the enemy 
      render_Enemy();
-
-     
+     if (PerspectiveCheck == 1) {
+     	background_perspective_2();
+     }
 
     requestAnimFrame( render );
 }

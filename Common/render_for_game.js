@@ -29,17 +29,17 @@ function render_boat() {
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1], 12);
 
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 12, 6);
      
 
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 18, 6);
      
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 24, 6);
      
-     gl.bindTexture( gl.TEXTURE_2D, texture[1]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1] + 30, 6);
 
 }
@@ -81,6 +81,8 @@ function shoot_laser() {
 }
 
 function render_Enemy() {
+  
+
     var pMatrix = mat4();
     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
     pMatrix = mult(pMatrix, translate(enemyX, enemyY, enemyZ));
@@ -88,18 +90,32 @@ function render_Enemy() {
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
 
-     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[6]);
      gl.drawArrays( gl.TRIANGLES, 0, 6);
 
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[6]);
      gl.drawArrays( gl.TRIANGLES, 12, 6);
      
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[6]);
      gl.drawArrays( gl.TRIANGLES,  18, 6);
      
-     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[6]);
      gl.drawArrays( gl.TRIANGLES, 24, 6);
      
-     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[6]);
      gl.drawArrays( gl.TRIANGLES, 30, 6);
+        
+}
+
+function background_perspective_2() {
+    var pMatrix = mat4();
+    pMatrix = perspective(angle, 1.0, 1.0, 2000); // right
+    pMatrix = mult(pMatrix, translate(0, 300, -2000));
+    pMatrix = mult(pMatrix, scalem(5.0, 4.5, 1.0));
+    gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
+    gl.uniform3fv(thetaLoc, theta); // differ    
+
+     // texture mapping for ocean
+    gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+    gl.drawArrays( gl.TRIANGLES, 0, countVertices[0]);
 }
