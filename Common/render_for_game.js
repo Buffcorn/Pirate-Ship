@@ -6,7 +6,7 @@ function render_Background() {
     
     var pMatrix = mat4();
     pMatrix = perspective(angle, 1.0, 1.0, 800); // right
-    pMatrix = mult(pMatrix, translate(OceanX, depthOcean, -582));
+    pMatrix = mult(pMatrix, translate(OceanX, depthOcean, -600));
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
 

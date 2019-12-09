@@ -100,7 +100,7 @@ var LazerPosition = 0; // the distance of the laser from the starting (in the ca
 //***********Land*************//
 var landx = 320; // amount to translate the land which is the sand/beach in the x direction
 var landy = depthOcean; // amount to translate the land which is the sand/beach in the y direction
-var landz = -581; // amount to translate the land which is the sand/beach in the z direction
+var landz = -599; // amount to translate the land which is the sand/beach in the z direction
 //***************************//
 var enemyX = 120; // amount to translate the enemy in the area in sand/beach in the x direction
 var enemyY = 0; // amount to translate the enemy in the area in sand/beach in the y direction
@@ -174,15 +174,15 @@ window.onload = function init()
 	if (Perspective2Check == 0){
 		theta[0] += 90.0;
 		depthOcean = -150;
-		BoatRotatex = 120;
+		BoatRotatex = 121;
 		BoatRotatey = -1;
 		BoatRotatez = 1;
 		xPosCannon = -10; 
         yPosCannon = 8;
 
-		xPosBoat = -137; 
+		xPosBoat = -118; 
 		yPosBoat = -55;
-		zPosBoat = -800; 
+		zPosBoat = -700; 
 
 		//BoatRotatex = 0; 
 		//BoatRotatey = -2;
@@ -206,7 +206,7 @@ window.onload = function init()
 
 		landx = 300; 
         landy = -149;
-        landz = -581; 
+        landz = -599; 
         
         
 	}
@@ -376,8 +376,8 @@ function pewpew() {
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the cannon down in perspective 2
             	if (CannonRotateY <= -10){
-			LazerRotateX -= 2.5;
-			CannonRotateY += 10;
+					LazerRotateX -= 2.5;
+					CannonRotateY += 10;
 	    	}
 	    }
             break;	  
@@ -388,17 +388,17 @@ function pewpew() {
         	// move the ship w/ the cannon 
         	// down
 			if(yPosCannon >= -30) {
-            	yPosCannon -= 2.0;
-            	yPosBoat -= 4.85;
-				LazerY -= 2.0;
+            	yPosCannon -= (2.0*2);
+            	yPosBoat -= (4.85*2);
+				LazerY -= (2.0*2);
 			}
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship closer to the 
 	    	// edge of the ocean
-			if(zPosBoat <= -379) {
-	            zPosCannon += 2.0;
-			    zPosBoat += 2.0;
-				LazerZ += 2.0;
+			if(zPosBoat <= -400) {
+	            zPosCannon += (1.79*3);
+			    zPosBoat += (2.5*3);
+				LazerZ += (1.79*3);
 			}
 	    }
             break;
@@ -408,18 +408,18 @@ function pewpew() {
 	    // move the ship w/ the cannon 
         // up
 			if(yPosCannon <= 280) {
-            	yPosCannon += 2.0;
-            	yPosBoat += 4.85;
-				LazerY += 2.0;
+            	yPosCannon += (2.0*2);
+            	yPosBoat += (4.85*2);
+				LazerY += (2.0*2);
 			}
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship further away 
 	    	// the edge of the ocean
             if (zPosBoat >= -641) {
-				zPosCannon -= 2.0;
-				zPosBoat -= 2.0;
-				LazerZ -= 2.0;
-			}
+				zPosCannon -= (1.79*3);
+				zPosBoat -= (2.5*3);
+				LazerZ -= (1.79*3);
+			} 
 	    }
             break;
         case 'a':
@@ -428,21 +428,20 @@ function pewpew() {
 	    	// move the ship w/ the cannon 
         	// to the left
             	if ( xPosCannon >= -60) {	
-			        xPosBoat -= 4.85;
-            		xPosCannon -= 2.0;
-	    		    LazerX -= 2.0;
+			        xPosBoat -= (4.85*2);
+            		xPosCannon -= (2.0*2);
+	    		    LazerX -= (2.0*2);
+
 	    		    
             	}
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship further from 
 	    	// the sand 
 			if ( xPosCannon >= -50) {	
-				xPosBoat -= 4.85;
-            	xPosCannon -= 2.0;
-	    		LazerX -= 2.0;
-	    		console.log(xPosBoat); 
-				console.log(xPosCannon);
-				console.log(LazerX);
+				xPosBoat -= (2.5*3);
+				xPosCannon -= (1.79*3);
+	    		LazerX -= (1.79*3);
+	    	
             }
 	    }
             break;	  
@@ -452,21 +451,20 @@ function pewpew() {
 	    // move the ship w/ the cannon 
         // to the right
 			if(xPosCannon <= 130) {
-				xPosCannon += 2.0;
-            	xPosBoat += 4.85;
-	    		LazerX += 2.0;
+				xPosCannon += (2.0*2);
+            	xPosBoat += (4.85*2);
+	    		LazerX += (2.0*2);
+
 	    		
 			}	    		
 	    } else if (PerspectiveCheck == 1) {
 	    	// move the ship closer to 
 	    	// the sand 
 			if (xPosCannon < 80) {            	
-				xPosBoat += 3.85;
-				xPosCannon += 2.0;
-	    		LazerX += 2.0;
-	    		console.log(xPosBoat); 
-				console.log(xPosCannon);
-				console.log(LazerX);
+				xPosBoat += (2.5*3);
+				xPosCannon += (1.79*3);
+	    		LazerX += (1.79*3);
+
 			}	    
 	    }
             break;
