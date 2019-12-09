@@ -18,6 +18,16 @@
 //
 //             The boat has a limit in all direction so that it does 
 //             not go off screen or on the sand.
+//             The button to reset the enemy allows you to give a new
+//             location for the enemy. 
+//             The button for new player allows you to add a new player
+//             and when you do press the button it will alert you of your 
+//             score before you start a new game with someone else 
+//             In new player we are assuming that every player will take a turn
+//             therefore if you fire twice its player ones turn again. 
+//             . End game will alert among either the individual or 
+//              all players who had killed the slime which is the enemy cube 
+//              hovering over the sand. 
 //*******************************************************************
 var directHits = 0;
 var highScore = 0;
