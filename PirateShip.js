@@ -99,7 +99,7 @@ var LazerY = -5; //amount to translate the lazer in the y direction
 var LazerZ = -450; //amount to translate the lazer in the z direction
 var LazerRotateX = 0; // amount to rotate the laser when firing to adjust when the cannon is adjusted 
 var LazerPosition = 0; // the distance of the laser from the starting (in the cannon)
-
+var firing = false;
 //***********Land*************//
 var landx = 320; // amount to translate the land which is the sand/beach in the x direction
 var landy = depthOcean; // amount to translate the land which is the sand/beach in the y direction
@@ -110,7 +110,18 @@ var enemyY = 0; // amount to translate the enemy in the area in sand/beach in th
 var enemyZ = -450; // amount to translate the enemy in the area in sand/beach in the z direction
 //**********Sound****************//
 //the sound affects for the pew pew 
+var pewSounds= [
+		"Audio/davidpewpew.mp3", 
+		"Audio/Itarupewpew1.mp3",
+		"Audio/Itarupewpew2.mp3",
+		"Audio/kevinpewpew1.mp3",
+		"Audio/kevinpewpew2.mp3", 
+		"Audio/scream.mp3", 
+		"Audio/scream2.mp3"
+		];
 var pewpewSound = new Audio(); // telling that this is an audio element 
+var screamVictory = new Audio();
+var finalScream = new Audio("Audio/full_scream.mp3");
 //***************************//
 
 window.onload = function init()
@@ -227,14 +238,21 @@ window.onload = function init()
     }
 document.getElementById("New_Player").onclick = function () {
 	// resets score for new player
+	numPlayer += 1;
+	pewpewSound.pause();
+    screamVictory.src = pewSounds[Math.floor((Math.random() * 2) + 5)];
+    screamVictory.play();
 	alert("Player " + numPlayer + ", your score is " + directHits);
 	enemyY = 0;
 	directHits = 0;
-	numPlayer += 1;
+
     }
     
     document.getElementById("End_Game").onclick = function () {
 	// ends game and displays high score
+	pewpewSound.pause();
+	screamVictory.pause();
+    finalScream.play();
 	alert("The high score is " + highScore + ". Congratulations player " + highPlayer + "!");
 	highScore = 0;
 	directHits = 0;
@@ -307,34 +325,44 @@ document.getElementById("New_Player").onclick = function () {
 }
 
 function Shoot(event) {
-	pewpewSound.src = "Common/pewpew.mp3"; //re establish the connection after 
+	
+	pewpewSound.currentTime = 0;
+	pewpewSound.src = pewSounds[Math.floor(Math.random() * 4)];
 	// playing the audio 
     var key = String.fromCharCode(event.keyCode);
         switch(key) {
 	  case 'p':
 	  case 'P':
-	  	pewpewSound.play(); // play the sound
-		pewpew();
+	  	 // play the sound
+	  	 	pewpewSound.play();	
+			pewpew();
 	    break;
         }  
-    pewpewSound = new Audio(); // re establishing the audio element
+        pewpewSound = new Audio();
+    // re establishing the audio element
 }
 
 function pewpew() {
 	// For shooting lasers and check if the laser 
 	// has hit the enemy 
-		
+	
+
+
 	if (enemyX <= LazerX && enemyX+10 >= LazerX && LazerY >= enemyY-10 && LazerY <= enemyY+10 ) {
 		// checking if the laser has hit the enemy
 		// if it hits will disappear by pushing it out of screen
 		// resets the laser to be back in the cannon 
+		// pewpewSound.pause();
+		// pewpewSound.src = pewSounds[Math.floor((Math.random() * 1) + 5)];
+	 //    pewpewSound.play();
+
 		if (PerspectiveCheck == 0) {
 			LazerX = xPosCannon-90; 
 			LazerY = yPosCannon-125; // added
 	    	} else if (PerspectiveCheck == 1 && LazerY >= enemyY-10 && LazerY <= enemyY+10) {
-			LazerX = xPosCannon - 90;
-			LazerPosition = 0;
-			LazerY = yPosCannon - 25; 
+				LazerX = xPosCannon - 90;
+				LazerPosition = 0;
+				LazerY = yPosCannon - 25; 
 	    }
 	    	enemyX = 300;  
 	    	directHits ++;
@@ -345,7 +373,7 @@ function pewpew() {
 			
 	    	
          	setTimeout(document.getElementById("Reset_Enemy").onclick, 1000);
-         	
+    
 	} else if (LazerX < 200) {
 		// if true means that the laser 
 		// will keep moving across until it 
@@ -363,6 +391,7 @@ function pewpew() {
 	} else {
 		// means that the laser has left the screen  
 		// will reset it to be in the cannon 
+		pewpewSound.pause();
 		if (PerspectiveCheck == 0) {
 			LazerX = xPosCannon-90; 
 			LazerY = yPosCannon-125; // added
@@ -372,15 +401,13 @@ function pewpew() {
 			LazerY = yPosCannon - 25; 
 	    	}
 	}
-	
+		
+
 }
 
 // key responses for moving boat
   function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
-
-
-
     switch(key) {
 	  case 'q':
 	  case 'Q':
@@ -494,7 +521,6 @@ function pewpew() {
 	    }
             break;
     }
-    console.log()
 }
 /****************/
 function makeSides(a, b, c, d) {
@@ -523,6 +549,10 @@ function makeSides(a, b, c, d) {
     numVerticiesCount += 6;
 }
 /****************/
+function whichPew() {
+
+}
+/***************/
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
