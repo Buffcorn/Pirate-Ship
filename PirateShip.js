@@ -19,6 +19,8 @@
 //             The boat has a limit in all direction so that it does 
 //             not go off screen or on the sand.
 //*******************************************************************
+var add1 = 1; 
+
 var canvas;
 var gl;
 var program;
@@ -41,10 +43,10 @@ var points = []; // contains all the vertices
 //*****Texture Coordinates*****//
 var Tex_coord = []; // contains all texture vertices for all the objects used
 var texCoord = [
-        vec2(0, 0), 
         vec2(0, 1), 
-        vec2(1, 1),
-        vec2(1, 0)
+        vec2(0, 0), 
+        vec2(1, 0),
+        vec2(1, 1)
 ];
 var image = [ ]; // array of images used for texture
 var texture = [ ]; // texture vertices 
@@ -172,17 +174,20 @@ window.onload = function init()
 	if (Perspective2Check == 0){
 		theta[0] += 90.0;
 		depthOcean = -150;
-		BoatRotatex = 90;
-		BoatRotatey = 180;
+		BoatRotatex = 120;
+		BoatRotatey = -1;
+		BoatRotatez = 1;
 		xPosCannon = -10; 
-        yPosCannon = 11;
-		xPosBoat = -200; 
-		yPosBoat = -75;
-		zPosBoat = -535; 
-		BoatRotatex = 90;
-        BoatRotatey = 0;
-		BoatRotatez = 0;
-        boatAngle = 90;
+        yPosCannon = 8;
+
+		xPosBoat = -137; 
+		yPosBoat = -55;
+		zPosBoat = -800; 
+
+		//BoatRotatex = 0; 
+		//BoatRotatey = -2;
+		//BoatRotatez = 0;
+        boatAngle = 45;
         scaleBoat = .60;
 
 		PerspectiveCheck = 1; //Change for the wasd control.
@@ -348,6 +353,9 @@ function pewpew() {
 // key responses for moving boat
   function keyResponse(event) {
     var key = String.fromCharCode(event.keyCode);
+
+
+
     switch(key) {
 	  case 'q':
 	  case 'Q':
@@ -432,7 +440,9 @@ function pewpew() {
 				xPosBoat -= 4.85;
             	xPosCannon -= 2.0;
 	    		LazerX -= 2.0;
-	    		
+	    		console.log(xPosBoat); 
+				console.log(xPosCannon);
+				console.log(LazerX);
             }
 	    }
             break;	  
@@ -451,15 +461,17 @@ function pewpew() {
 	    	// move the ship closer to 
 	    	// the sand 
 			if (xPosCannon < 80) {            	
-				xPosBoat += 4.85;
+				xPosBoat += 3.85;
 				xPosCannon += 2.0;
 	    		LazerX += 2.0;
-	    		
+	    		console.log(xPosBoat); 
+				console.log(xPosCannon);
+				console.log(LazerX);
 			}	    
 	    }
             break;
-        }
-       
+    }
+    console.log()
 }
 /****************/
 function makeSides(a, b, c, d) {
@@ -497,7 +509,7 @@ function render()
     mvMatrix = mult(mvMatrix, rotate(theta[2], 0.0, 0.0, 1.0));
 
     gl.uniformMatrix4fv( modelView, false, flatten(mvMatrix) );
-    
+
     //draw the ocean
     render_Background();
 
@@ -515,6 +527,8 @@ function render()
 
      //draw the enemy 
      render_Enemy();
+
+     
 
     requestAnimFrame( render );
 }

@@ -25,7 +25,7 @@ function render_boat() {
      gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );  
 
     
-
+     // texture map a side of the boat 
      gl.bindTexture( gl.TEXTURE_2D, texture[1]);
      gl.drawArrays( gl.TRIANGLES, startVerticesCount[1], 12);
 
@@ -88,7 +88,18 @@ function render_Enemy() {
     gl.uniformMatrix4fv( projection, false, flatten(pMatrix) );        
     gl.uniform3fv(thetaLoc, theta); // differ    
 
-     // texture mapping for ocean
-    gl.bindTexture( gl.TEXTURE_2D, texture[2]);
-    gl.drawArrays( gl.TRIANGLES, 0, countVertices[0]);
+     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
+     gl.drawArrays( gl.TRIANGLES, 0, 6);
+
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES, 12, 6);
+     
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES,  18, 6);
+     
+     gl.bindTexture( gl.TEXTURE_2D, texture[5]);
+     gl.drawArrays( gl.TRIANGLES, 24, 6);
+     
+     gl.bindTexture( gl.TEXTURE_2D, texture[2]);
+     gl.drawArrays( gl.TRIANGLES, 30, 6);
 }
