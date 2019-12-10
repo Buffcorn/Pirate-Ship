@@ -248,14 +248,13 @@ window.onload = function init()
     }
 document.getElementById("New_Player").onclick = function () {
 	// resets score for new player
-	numPlayer += 1;
 	pewpewSound.pause();
     screamVictory.src = pewSounds[Math.floor((Math.random() * 2) + 5)];
     screamVictory.play();
 	alert("Player " + numPlayer + ", your score is " + directHits);
 	enemyY = 0;
 	directHits = 0;
-
+	numPlayer += 1;
     }
     
     document.getElementById("End_Game").onclick = function () {
